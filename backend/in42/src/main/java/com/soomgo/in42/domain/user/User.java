@@ -1,6 +1,6 @@
 package com.soomgo.in42.domain.user;
 
-import com.in.hackerton.in42.global.util.BaseTimeEntity;
+import com.soomgo.in42.global.util.BaseTimeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
