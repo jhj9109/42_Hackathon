@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.sun.xml.messaging.saaj:saaj-impl:3.0.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.sun.xml.messaging.saaj/saaj-impl/3.0.0/592e76b886471149217e4090b02e3d36fd702777/saaj-impl-3.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.sun.xml.messaging.saaj/saaj-impl/3.0.0/d07286e5e2a16197c0cd782fc0e8901286f24f1a/saaj-impl-3.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

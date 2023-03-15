@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework.ws:spring-xml:4.0.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.ws/spring-xml/4.0.2/84d037a130a79f0b62a69665503dc05a1005498a/spring-xml-4.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.ws/spring-xml/4.0.2/763c733dd22fa5aae5986f529c365b516d8e8bca/spring-xml-4.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
