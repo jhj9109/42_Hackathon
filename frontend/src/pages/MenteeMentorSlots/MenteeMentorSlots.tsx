@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import SlotTable from '../../components/SlotTable';
 import './MenteeMentorSlots.css';
 
 const MenteeMentorSlots = () => {
@@ -8,7 +9,10 @@ const MenteeMentorSlots = () => {
 
   return (
     <Stack className="MenteeMentorSlots">
-      <div className="MenteeMentorSlots-Calendar">달력입니다</div>
+      {/* <div className="MenteeMentorSlots-Calendar">달력입니다</div> */}
+      <div className="MenteeMentorSlots-Calendar">
+        <SlotTable/>
+      </div>
       <div className="MenteeMentorSlots-Tags">
         <div>과제 : minirt 작성자 : hyeonjan</div>
       </div>
