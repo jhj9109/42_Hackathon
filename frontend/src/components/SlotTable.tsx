@@ -23,29 +23,29 @@ const tableStyle = {
   // Text
   color: TEXT_COLOR,
   width: "100%",// 양옆 꽉차도록
-  borderCollapse: "collapse" as any,//보더간 경계는 하나
-  border: "1px gray solid",//테이블테두리
-  borderSpacing: "0px",//셀간 간격
-  whiteSpace: "nowrap" as any,//텍스트크기로 인해 줄바꿈 생기는것 방지
+  borderCollapse: "collapse" as any,// 보더간 경계는 하나
+  border: "1px gray solid",// 테이블테두리
+  borderSpacing: "0px",// 셀간 간격
+  whiteSpace: "nowrap" as any,// 텍스트크기로 인해 줄바꿈 생기는것 방지
 }
 
 const tableHeaderStyle = {
   // 날짜가 적히는 첫 라인. 높이는 글자 크기에 의존한다.
-  border: "1px #ddd solid",//테이블헤드테두리
+  border: "1px #ddd solid",// 테이블헤드테두리
 }
 
 const tableBodyStyle = {
   height: "1.5rem",
-  // border: "1px gray solid",//바디라인별테두리
+  // border: "1px gray solid",// 바디라인별테두리
 }
 
 const rowHeaderStyle = {
   width: `${100 - TILE_WIDTH_PERCENT * 7}%`,
   padding: "4px 24px",
-  border: "1px #ddd solid",//바디라인별 헤드의 테두리
+  border: "1px #ddd solid",// 바디라인별 헤드의 테두리
 }
 const tileStyle = {
-  border: "1px #ddd solid",//바디라인별 타일별의 테두리
+  border: "1px #ddd solid",// 바디라인별 타일별의 테두리
   width: `${TILE_WIDTH_PERCENT}%`,
 };
 
@@ -73,7 +73,7 @@ const getString = (date: Date) => `${getDayString(date.getDay())} ${date.toLocal
   'ko-kr', {month: 'numeric', day: 'numeric' })
   .replace(". ", "/").replace(".", "")}`
 
-export default function FT_Table() {
+export default function SlotTable() {
   const currDate = new Date()
   return (
     <div style={tableContainerStyle}>
