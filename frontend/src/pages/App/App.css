@@ -1,9 +1,13 @@
 .App {
+  font-family: 'Jua', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Sofia Sans', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
+  background-color: #fafafa;
 }
 
 .body {
@@ -11,7 +15,7 @@
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
-  background-color: #d9d9d9;
+  background-color: white;
   width: 35vw;
   height: 100vh;
 }
@@ -25,7 +29,8 @@
 
 .header {
   height: 8%;
-  background-color: #292D39;
+  background-color: #292d39;
+  color: white;
 }
 
 .main {
@@ -39,5 +44,11 @@
 
 .footer {
   height: 8%;
-  background-color: #292D39;
+  background-color: #292d39;
+  color: white;
+}
+
+button {
+  border: none;
+  background: none;
 }

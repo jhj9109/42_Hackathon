@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './MenteeMentors.css';
 
@@ -7,7 +6,7 @@ const MenteeMentors = () => {
   const navigator = useNavigate();
 
   return (
-    <Stack className="MenteeMentors">
+    <>
       <div className="MenteeMentors-Content-Container">
         <div className="MenteeMentors-Title">멘토 리스트</div>
         <div className="MenteeMentors-Contents">
@@ -25,14 +24,14 @@ const MenteeMentors = () => {
         </div>
       </div>
       <div className="MenteeMentors-Button-Container">
-        <Button
+        {/* <Button
           className="MenteeMentors-Button"
           onClick={() => navigator('/mentee/slots')}
         >
           멘토링 요청 슬롯 열기
-        </Button>
+        </Button> */}
       </div>
-    </Stack>
+    </>
   );
 };
 

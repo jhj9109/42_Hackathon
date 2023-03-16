@@ -1,12 +1,11 @@
 import React from 'react';
-import { Button, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './MenteeSlotsMentoring.css';
 
 const MenteeSlotsMentoring = () => {
   const navigator = useNavigate();
   return (
-    <Stack gap={2} className="MenteeSlotsMentoring">
+    <>
       <div className="MenteeSlotsMentoring-Content-Group">
         <div className="MenteeSlotsMentoring-Content">과제 : MiniRT</div>
         <div className="MenteeSlotsMentoring-Content">멘토 : hyeonjan</div>
@@ -17,14 +16,14 @@ const MenteeSlotsMentoring = () => {
         </div>
       </div>
       <div className="MenteeSlotsMentoring-Button-Container">
-        <Button
+        {/* <Button
           className="MenteeSlotsMentoring-Button"
           onClick={() => navigator('/')}
         >
           멘토링 신청하기
-        </Button>
+        </Button> */}
       </div>
-    </Stack>
+    </>
   );
 };
 

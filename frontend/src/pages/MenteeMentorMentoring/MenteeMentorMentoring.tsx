@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Stack } from 'react-bootstrap';
 import './MenteeMentorMentoring.css';
 
 const MenteeMentorMentoring = () => {
   return (
-    <Stack gap={2} className="MenteeMentorMentoring">
+    <>
       <div className="MenteeMentorMentoring-Content-Group">
         <div className="MenteeMentorMentoring-Content">과제 : MiniRT</div>
         <div className="MenteeMentorMentoring-Content">멘토 : hyeonjan</div>
@@ -15,11 +14,11 @@ const MenteeMentorMentoring = () => {
         </div>
       </div>
       <div className="MenteeMentorMentoring-Button-Container">
-        <Button className="MenteeMentorMentoring-Button">
+        {/* <Button className="MenteeMentorMentoring-Button">
           멘토링 신청하기
-        </Button>
+        </Button> */}
       </div>
-    </Stack>
+    </>
   );
 };
 

@@ -7,6 +7,8 @@
   background-color: aliceblue;
   height: 70%;
   width: 100%;
+  max-height: 50vh;
+  overflow: auto;
 }
 
 .MenteeMentorSlots-Tags {
