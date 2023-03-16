@@ -16,12 +16,12 @@ const MenteeMentorSlots = () => {
         <div>과제 : minirt 작성자 : hyeonjan</div>
       </div>
       <div className="MenteeMentorSlots-Button-Container">
-        {/* <Button
-          className="MenteeMentorSlots-Button"
-          onClick={() => navigator('/mentee/mentors/1/mentoring')}
-        >
-          멘토링 시간 선택 완료
-        </Button> */}
+      <button
+        className="MenteeMentorSlots-Button"
+        onClick={() => navigator('/mentee/mentors/1/mentoring')}
+      >
+        멘토링 시간 선택 완료
+      </button>
       </div>
     </>
   );

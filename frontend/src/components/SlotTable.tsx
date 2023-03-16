@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './SlotTable.css';
 
 const TEXT_COLOR = '#02c4c7';
 
@@ -16,7 +17,7 @@ const myStyle = {
 };
 
 const tableContainerStyle = {
-  margin: '0 30px',
+  width: "100%",
 };
 
 const tableStyle = {
@@ -24,14 +25,16 @@ const tableStyle = {
   color: TEXT_COLOR,
   width: '100%', // 양옆 꽉차도록
   borderCollapse: 'collapse' as any, // 보더간 경계는 하나
-  border: '1px gray solid', // 테이블테두리
+  border: '0.0625rem gray solid', // 테이블테두리
   borderSpacing: '0px', // 셀간 간격
-  whiteSpace: 'nowrap' as any, // 텍스트크기로 인해 줄바꿈 생기는것 방지
+  // nowrap으로 인해 칸의 크기가 변형 되어서 삭제 => 차라리 줄 바꿈이 나음
 };
 
 const tableHeaderStyle = {
   // 날짜가 적히는 첫 라인. 높이는 글자 크기에 의존한다.
-  border: '1px #ddd solid', // 테이블헤드테두리
+  border: '0.0625rem #ddd solid', // 테이블헤드테두리
+  textAlign: "center" as any,
+  verticalAlign: "middle",
 };
 
 const tableBodyStyle = {
@@ -40,12 +43,15 @@ const tableBodyStyle = {
 };
 
 const rowHeaderStyle = {
+  whiteSpace: "nowrap" as any,
+  textAlign: "center" as any,
+  verticalAlign: "middle",
   width: `${100 - TILE_WIDTH_PERCENT * 7}%`,
-  padding: '4px 24px',
-  border: '1px #ddd solid', // 바디라인별 헤드의 테두리
+  padding: '0.0625rem 0.5rem',
+  border: '0.0625rem #ddd solid', // 바디라인별 헤드의 테두리
 };
 const tileStyle = {
-  border: '1px #ddd solid', // 바디라인별 타일별의 테두리
+  border: '0.0625rem #ddd solid', // 바디라인별 타일별의 테두리
   width: `${TILE_WIDTH_PERCENT}%`,
 };
 
@@ -78,8 +84,8 @@ const getString = (date: Date) =>
 export default function SlotTable() {
   const currDate = new Date();
   return (
-    <div style={tableContainerStyle}>
-      <table style={tableStyle}>
+    <div className='tableContainer'>
+      <table className="slotTable">
         <SlotTableHeaders currDate={currDate} />
         <SlotTableBody currDate={currDate} />
       </table>
@@ -94,10 +100,10 @@ function SlotTableHeaders({ currDate }: { currDate: Date }) {
 
   return (
     <thead>
-      <tr style={tableHeaderStyle}>
-        <th style={myStyle}></th>
+      <tr>
+        <th className='tableHeader'></th>
         {Array.from({ length: 7 }).map((_, index) => (
-          <th key={index} style={myStyle}>
+          <th key={index} className='tableHeader'>
             {getString(new Date(year, month, date + index))}
           </th>
         ))}
@@ -167,7 +173,7 @@ function SlotTableRow({
     return state;
   };
   return (
-    <tr style={tableBodyStyle}>
+    <tr className='tableBody'>
       <RowHeader str={getHeaderStr(rowIndex)} />
       {Array.from({ length: 7 }).map((_, colIndex) => (
         <Tile
@@ -183,7 +189,7 @@ function SlotTableRow({
 }
 
 function RowHeader({ str }: { str: string }) {
-  return <td style={rowHeaderStyle}>{str}</td>;
+  return <td className='rowHeader'>{str}</td>;
 }
 
 function Tile({
@@ -201,18 +207,16 @@ function Tile({
   // state & TILE_STATE.SLOTS : 초기값으로 아마 넘어올, 이전에 선택된 형태
   // state & TILE_STATE.SELECTABLE : SLOTS 여부에 상관없이, 그 상황에서 선택할 수 있는 곳.
   // state & TILE_STATE.SELECTED :
-  const background =
-    state & TILE_STATE.ELAPSED
-      ? 'gray'
-      : state & TILE_STATE.SELECTED
-      ? 'blue'
-      : 'white';
-  // console.log(rowIndex, colIndex, state, state & TILE_STATE.ELAPSED)
+  const className = 'tile ' + (state & TILE_STATE.ELAPSED
+    ? 'elapsed'
+    : state & TILE_STATE.SELECTED
+    ? 'selected'
+    : '');
   return state & TILE_STATE.ELAPSED ? (
-    <td style={{ ...tileStyle, background }}></td>
+    <td className={className}></td>
   ) : (
     <td
-      style={{ ...tileStyle, background }}
+      className={className}
       onClick={() => handleSelect(rowIndex, colIndex)}
     ></td>
   );
