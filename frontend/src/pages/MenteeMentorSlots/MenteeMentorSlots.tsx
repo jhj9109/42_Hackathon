@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
-import { isSlot, sampleOpenSlots } from '../../components/SlotTable/slotTableUtils';
+import { isSlot, sampleOpenSlots, updateSelected } from '../../components/SlotTable/slotTableUtils';
 
 const ButtonContainer = styled.div`
   width: 100%;
@@ -61,6 +61,9 @@ const MenteeMentorSlots = () => {
   // TODO
   const currDate = new Date();
   const [openSlots, setOpenSlots] = useState<Session[]>([])
+  const [selected, setSelected] = useState(() => new Set<number>());
+  const handleSelect = (rowIndex: number, colIndex: number) =>
+    setSelected((prev) => updateSelected(prev, rowIndex + colIndex * 48))
 
   useEffect(() => {
     setTimeout(() => setOpenSlots(sampleOpenSlots))
@@ -75,6 +78,8 @@ const MenteeMentorSlots = () => {
               currDate={currDate}
               openSlots={openSlots}
               isSelectable={isSlot}
+              selected={selected}
+              onSelect={handleSelect}
             />
         }
       </Calrendar>

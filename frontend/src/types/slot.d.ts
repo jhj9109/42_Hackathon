@@ -28,8 +28,8 @@ interface SlotTableProps {
   currDate: Date;
   openSlots: Session[];
   isSelectable: (param: IsSelectableParams) => boolean
-  selected?: Set<number>;
-  onSelect?: (rowIndex: number, colIndex: number) => void;
+  selected: Set<number>;
+  onSelect: (rowIndex: number, colIndex: number) => void;
 }
 
 type HandleSelect = (rowIndex: number, colIndex: number) => void;
@@ -38,8 +38,8 @@ interface SlotTableBodyProps {
   currDate: Date;
   openSlots: Session[];
   isSelectable: FunctionIsSelectable;
-  selected?: Set<number>;
-  onSelect?: (rowIndex: number, colIndex: number) => void;
+  selected: Set<number>;
+  onSelect: (rowIndex: number, colIndex: number) => void;
 }
 
 interface SlotTableRowProps {

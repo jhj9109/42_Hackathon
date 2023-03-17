@@ -55,9 +55,6 @@ function SlotTableBody(
     selected,
     onSelect,
 }: SlotTableBodyProps) {
-  const [selected2, setSelected2] = useState(() => new Set<number>());
-  const handleSelect2 = (rowIndex: number, colIndex: number) =>
-    setSelected2((prev) => updateSelected(prev, rowIndex + colIndex * 48))
   
   return (
     <tbody>
@@ -66,8 +63,8 @@ function SlotTableBody(
           key={rowIndex}
           rowIndex={rowIndex}
           currDate={currDate}
-          selected={selected2}
-          handleSelect={handleSelect2}
+          selected={selected}
+          handleSelect={onSelect}
           openSlots={openSlots}
           isSelectable={isSelectable}
         />
