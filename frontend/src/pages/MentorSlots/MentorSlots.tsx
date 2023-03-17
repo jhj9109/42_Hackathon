@@ -115,8 +115,8 @@ const isSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =
   openSlots.some(session => isClamp({rowIndex, colIndex, currDate, startTime: session.startTime, endTime:session.endTime}))
 
 const sampleOpenSlots: Session[] = [
-  {sessionId: 1, startTime: "03/18/09:00", endTime: "03/18/12:00", tags: [{tagId: 1, tagName: "libft"}]},
-  {sessionId: 2, startTime: "03/18/15:00", endTime: "03/18/18:00", tags: [{tagId: 2, tagName: "gnl"}]},
+  {sessionId: 1, startTime: "2023/03/18/09:00", endTime: "2023/03/18/12:00", tags: [{tagId: 1, tagName: "libft"}]},
+  {sessionId: 2, startTime: "2023/03/18/15:00", endTime: "2023/03/18/18:00", tags: [{tagId: 2, tagName: "gnl"}]},
 ]
 
 const MenteeMentorSlots = () => {
@@ -132,7 +132,7 @@ const MenteeMentorSlots = () => {
       <Title>멘토링 시간 선택</Title>
       <Calrendar>
         {!openSlots ? <div>로딩중</div>
-        : <SlotTable currDate={currDate} openSlots={openSlots} isSeletable={isSlot}/>}
+        : <SlotTable currDate={currDate} openSlots={openSlots} isSelectable={isSlot}/>}
       </Calrendar>
       <MentoringContentContainer>
         <Tag>본인의 태그 리스트 가져오기</Tag>
