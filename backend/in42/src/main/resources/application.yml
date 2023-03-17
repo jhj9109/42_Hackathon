@@ -8,7 +8,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
@@ -35,10 +35,10 @@ spring:
 
 # cors ??
 cors:
-  allowed-origins: 'http://10.19.207.69:8080,http://10.19.237.190:8080,http://localhost:8080,http://10.18.201.217:8080'
+  allowed-origins: 'http://localhost:8080,http://localhost:3000,http://10.18.238.114:3000,http://10.18.238.114:8080'
   allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
   allowed-headers: '*'
-  allowed-Credentials: false
+  allowed-Credentials: true
   max-age: 3600
 
 jwt:
@@ -46,4 +46,4 @@ jwt:
 
 info:
   web:
-    frontUrl: 'http://10.19.237.190:8080'
+    frontUrl: 'http://10.18.201.217:3000'

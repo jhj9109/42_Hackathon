@@ -47,7 +47,7 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String finalUrl = determineTargetUrl(request, response, authentication);
+//        String finalUrl = determineTargetUrl(request, response, authentication);
 
         Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
@@ -88,7 +88,7 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
             userRefreshToken.setRefreshToken(refreshToken.getToken());
             userRefreshTokenRepository.save(userRefreshToken);
         } else {
-            userRefreshToken = new Token(saveUser, refreshToken.getToken(), accessToken.getToken());
+            userRefreshToken = new Token(saveUser, refreshToken.getToken(), userInfo.getIntraId());//accessToken.getToken());
             userRefreshTokenRepository.saveAndFlush(userRefreshToken);
         }
 
@@ -96,9 +96,10 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
         CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
-        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge + 60 * 60 * 24);
+//        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge + 60 * 60 * 24);
+        CookieUtil.addCookie(response, ACCESS_TOKEN, userInfo.getIntraId(), cookieMaxAge + 60 * 60 * 24);
 
-        finalUrl = UriComponentsBuilder.fromUriString(applicationYmlRead.getFrontUrl() + "/test")
+        String finalUrl = UriComponentsBuilder.fromUriString(applicationYmlRead.getFrontUrl())
 //                .queryParam("token", userRefreshToken == null ? accessToken.getToken() : userRefreshToken.getAccessToken())
                 .build().toUriString();
 
