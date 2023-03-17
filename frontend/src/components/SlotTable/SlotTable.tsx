@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import './SlotTable.css';
-import { ADJUSTMENT_MINUTES, getHeaderStr, getString, isSlot, setState, setTileClass, TILE_STATE, updateSelected } from './slotTableUtils';
+import { getHeaderStr, getString, setState, setTileClass, TILE_STATE, updateSelected } from './slotTableUtils';
 
 export default function SlotTable(
   {
     currDate,
     openSlots,
-    isSelectable
+    isSelectable,
+    selected,
+    onSelect,
 }: SlotTableProps)
 {
   console.log(openSlots);
@@ -14,7 +16,13 @@ export default function SlotTable(
     <div className='tableContainer'>
       <table className="slotTable">
         <SlotTableHeaders currDate={currDate} />
-        <SlotTableBody currDate={currDate} openSlots={openSlots} isSelectable={isSelectable}/>
+        <SlotTableBody
+          currDate={currDate}
+          openSlots={openSlots}
+          isSelectable={isSelectable}
+          selected={selected}
+          onSelect={onSelect}
+        />
       </table>
     </div>
   );
