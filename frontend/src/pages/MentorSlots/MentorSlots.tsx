@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
-import SlotTable from '../../components/SlotTable';
+import SlotTable from '../../components/SlotTable/SlotTable';
 
 const ButtonContainer = styled.div`
   width: 100%;
