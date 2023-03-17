@@ -5,9 +5,9 @@ import Button from '../../components/Button/Button';
 import FlexBox from '../../components/FlexBox/FlexBox';
 
 const Div = styled.div`
-  background-color: #d6d6d6;
-  color: white;
-  height: 80%;
+  background-color: #fafafa;
+  color: #292d39;
+  height: 45%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -22,13 +22,14 @@ const Login = () => {
   return (
     <FlexBox
       flexDirection="column"
-      width="80%"
-      height="80%"
-      justifyContent="space-around"
+      width="98%"
+      height="100%"
+      justifyContent="center"
       alignItems="center"
+      gap="1vh"
     >
       <Div>42in</Div>
-      <Button size="middle" onClick={() => navigator('/')}>
+      <Button size="large" onClick={() => navigator('/')}>
         로그인
       </Button>
     </FlexBox>

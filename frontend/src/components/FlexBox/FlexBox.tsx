@@ -7,6 +7,7 @@ interface IStyle {
   height?: string;
   justifyContent?: string;
   alignItems?: string;
+  gap?: string;
 }
 
 interface Props extends IStyle {
@@ -20,6 +21,7 @@ const FlexBoxStyle = styled.div<IStyle>`
   height: ${(props) => props.height};
   justify-content: ${(props) => props.justifyContent};
   align-items: ${(props) => props.alignItems};
+  gap: ${(props) => props.gap};
 `;
 
 const FlexBox = ({ children, flexDirection, ...rest }: Props) => {

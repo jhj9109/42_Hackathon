@@ -16,7 +16,7 @@ const ContainerStyle = styled.div<IContainerStyle>`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   border-radius: 1rem;
-  background-color: #d6d6d6;
+  background-color: #fafafa;
 `;
 
 const Container = ({ children, ...rest }: Props) => {

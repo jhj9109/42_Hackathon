@@ -73,12 +73,12 @@ const Home = () => {
         <Row>
           <P>kangkim님의 minishell 멘토링 16시 30분</P>
           <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
-          <Emoji>❌</Emoji>
+          <Emoji onClick={() => alert('mentoring cancel modal')}>❌</Emoji>
         </Row>
         <Row>
           <P>kangkim님의 minishell 멘토링 16시 30분</P>
           <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
-          <Emoji>❌</Emoji>
+          <Emoji onClick={() => alert('mentoring cancel modal')}>❌</Emoji>
         </Row>
       </HomeContainer>
       <HomeContainer>
