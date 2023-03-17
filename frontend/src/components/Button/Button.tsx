@@ -5,10 +5,11 @@ interface Props {
   children: React.ReactNode;
   onClick: () => void;
   size: 'small' | 'middle' | 'large';
+  disabled?: boolean;
 }
 
 const SmallButton = styled.button`
-  background-color: #00babb;
+  background-color: ${({ disabled }) => disabled ? "#eeeeee" : "#00babb"};
   border-radius: 0.5rem;
   width: 49%;
   height: 6vh;
@@ -17,7 +18,7 @@ const SmallButton = styled.button`
 `;
 
 const MiddleButton = styled.button`
-  background-color: #00babb;
+  background-color: ${({ disabled }) => disabled ? "#eeeeee" : "#00babb"};
   border-radius: 0.5rem;
   width: 75%;
   height: 6vh;
@@ -26,7 +27,7 @@ const MiddleButton = styled.button`
 `;
 
 const LargeButton = styled.button`
-  background-color: #00babb;
+  background-color: ${({ disabled }) => disabled ? "#eeeeee" : "#00babb"};
   border-radius: 0.5rem;
   width: 99%;
   height: 6vh;
@@ -34,12 +35,12 @@ const LargeButton = styled.button`
   color: white;
 `;
 
-const Button = ({ children, onClick, size }: Props) => {
+const Button = ({ children, onClick, size, disabled }: Props) => {
   if (size === 'small')
-    return <SmallButton onClick={onClick}>{children}</SmallButton>;
+    return <SmallButton disabled={disabled} onClick={onClick}>{children}</SmallButton>;
   else if (size === 'middle')
-    return <MiddleButton onClick={onClick}>{children}</MiddleButton>;
-  return <LargeButton onClick={onClick}>{children}</LargeButton>;
+    return <MiddleButton disabled={disabled} onClick={onClick}>{children}</MiddleButton>;
+  return <LargeButton disabled={disabled} onClick={onClick}>{children}</LargeButton>;
 };
 
 export default Button;

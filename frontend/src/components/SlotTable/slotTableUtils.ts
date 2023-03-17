@@ -65,6 +65,9 @@ export const isClamp = ({rowIndex, colIndex, currDate, startTime, endTime}: IsCl
 export const isSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
   openSlots.some(session => isClamp({rowIndex, colIndex, currDate, startTime: session.startTime, endTime:session.endTime}))
 
+export const notSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
+  !isSlot({rowIndex, colIndex, openSlots, currDate});
+
 export const isElapsed = (rowIndex: number, colIndex: number, currDate: Date) =>
   colIndex === 0 && rowIndex < (currDate.getHours() * 2 + Math.ceil((Number(currDate.getMinutes()) + ADJUSTMENT_MINUTES) / 30));
 export const setState = (
