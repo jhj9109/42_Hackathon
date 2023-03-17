@@ -43,6 +43,10 @@
     background-color: gray;
 }
 
+.tile.slot {
+    background-color: #02c4c7;
+}
+
 .tile.selected {
     background-color: blue;
 }
