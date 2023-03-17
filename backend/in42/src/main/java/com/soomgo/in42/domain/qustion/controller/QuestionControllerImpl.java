@@ -1,6 +1,7 @@
 package com.soomgo.in42.domain.qustion.controller;
 
 
+import com.soomgo.in42.domain.qustion.service.QuestionService;
 import com.soomgo.in42.domain.security.jwt.TokenService;
 import com.soomgo.in42.domain.user.dto.UserDto;
 import com.soomgo.in42.global.util.CookieUtil;
@@ -18,10 +19,12 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/question")
 public class QuestionControllerImpl {
 
+    private final QuestionService questionService;
     private final TokenService tokenService;
     @GetMapping(value = "")
     public UserDto findOpenQuestion(HttpServletRequest request) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+
         return user;
     }
 

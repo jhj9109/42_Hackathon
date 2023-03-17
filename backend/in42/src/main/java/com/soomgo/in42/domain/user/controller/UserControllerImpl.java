@@ -1,5 +1,6 @@
 package com.soomgo.in42.domain.user.controller;
 
+import com.soomgo.in42.domain.qustion.dto.FindOpenQeustionResponseDto;
 import com.soomgo.in42.domain.qustion.dto.UpdateQuestionTagDto;
 import com.soomgo.in42.domain.qustion.service.QuestionService;
 import com.soomgo.in42.domain.security.jwt.TokenService;
@@ -35,8 +36,8 @@ public class UserControllerImpl implements UserController {
 
     @GetMapping(value = "/test")
     public String firstApiTest(HttpServletRequest request) {
-        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
-        return user.toString();
+//        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return "Done!";
     }
 
     @GetMapping(value = "/detail")
@@ -58,9 +59,10 @@ public class UserControllerImpl implements UserController {
     }
 
     @GetMapping(value = "/questions")
-    public UserDto findUserQuestions(HttpServletRequest request) {
+    public FindOpenQeustionResponseDto findUserQuestions(HttpServletRequest request) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
-        return user;
+
+        return questionService.findUserOpenQuestions(user);
     }
 
     @PostMapping(value = "/question")

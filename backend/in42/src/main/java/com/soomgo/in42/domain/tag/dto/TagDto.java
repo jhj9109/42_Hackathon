@@ -9,16 +9,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Getter
 @Builder
 public class TagDto {
-    private Integer id;
+    private Integer tagId;
     private String name;
 
     public static TagDto from(Tag tag) {
@@ -27,11 +24,22 @@ public class TagDto {
             tagDto = null;
         } else {
             tagDto = TagDto.builder()
-                    .id(tag.getId())
+                    .tagId(tag.getId())
                     .name(tag.getName())
                     .build();
         }
         return tagDto;
+    }
+
+    public static List<TagDto> from(Set<Tag> tags) {
+        List<TagDto> tagDtos = new ArrayList<>();
+        for (Tag tag : tags) {
+            TagDto tagDto = TagDto.builder()
+                    .tagId(tag.getId())
+                    .name(tag.getName()).build();
+            tagDtos.add(tagDto);
+        }
+        return tagDtos;
     }
 
     public static Set<Tag> convertTagDtoListToTagSet(List<TagDto> tagDtoList) {

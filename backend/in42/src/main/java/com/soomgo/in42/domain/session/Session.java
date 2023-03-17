@@ -21,9 +21,9 @@ public class Session extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Setter
-    @Column(name = "mento_user_id")
-    private Integer mentoUserId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mento_user_id", insertable = false, updatable = false)
+    private User mentoUser;
 
     @Setter
     @Column(name = "start_time")
@@ -33,13 +33,8 @@ public class Session extends BaseTimeEntity {
     @Column(name = "end_time")
     private Date endTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mento_user_id", insertable = false, updatable = false)
-    private User mentoUser;
-
     @OneToMany(mappedBy = "session")
     private List<Question> questions = new ArrayList<>();
-
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
