@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
+import { isSlot, sampleOpenSlots } from '../../components/SlotTable/slotTableUtils';
 
 const ButtonContainer = styled.div`
   width: 100%;
@@ -35,67 +36,6 @@ const Calrendar = styled.div`
   overflow: auto;
 `;
 
-// TODO
-
-type KstDate = Date;
-interface TagType {
-  tagId: number;
-  tagName: string;
-}
-interface Session {
-  sessionId : number;
-  startTime: string;
-  endTime: string;
-  tags: TagType[];
-}
-interface IsSelectableParams {
-  rowIndex: number;
-  colIndex: number;
-  openSlots: Session[];
-  currDate: Date;
-}
-interface IsClampParams {
-  rowIndex: number;
-  colIndex: number;
-  currDate: Date;
-  startTime: string;
-  endTime: string;
-}
-
-const utcOffset = 9 * 60 * 60 * 1000; // UTC+9
-const getKstDate = (date: Date) => new Date(date.getTime() + utcOffset)
-
-const isClamp = ({rowIndex, colIndex, currDate, startTime, endTime}: IsClampParams) => {
-  // 2023-03-17T05:30:17.828Z
-
-  const target = new Date(
-      currDate.getFullYear(),
-      currDate.getMonth(),
-      currDate.getDate() + colIndex,
-      Math.floor(rowIndex / 2),
-      (rowIndex % 2) * 30
-   );
-  const start = new Date(startTime)
-  const end = new Date(endTime)
-  
-  const [sTime, tTime, eTime] = [
-    start.getTime() / (60 * 1000),
-    target.getTime() / (60 * 1000),
-    end.getTime() / (60 * 1000)
-  ]
-  
-  return (sTime <= tTime && tTime <= eTime);
-}
-
-const isSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
-  openSlots.some(session => isClamp({rowIndex, colIndex, currDate, startTime: session.startTime, endTime:session.endTime}))
-
-const sampleOpenSlots: Session[] = [
-  {sessionId: 1, startTime: "2023/03/18/09:00", endTime: "2023/03/18/12:00", tags: [{tagId: 1, tagName: "libft"}]},
-  {sessionId: 2, startTime: "2023/03/18/15:00", endTime: "2023/03/18/18:00", tags: [{tagId: 2, tagName: "gnl"}]},
-]
-
-
 const MenteeSlots = () => {
   const navigator = useNavigate();
 
@@ -111,8 +51,13 @@ const MenteeSlots = () => {
     <MenteeSlotsStyle>
       <Title>멘토링 시간 선택</Title>
       <Calrendar>
-      {!openSlots ? <div>로딩중</div>
-        : <SlotTable currDate={currDate} openSlots={openSlots} isSelectable={isSlot}/>}
+        {!openSlots ? <div>로딩중</div>
+          : <SlotTable
+              currDate={currDate}
+              openSlots={openSlots}
+              isSelectable={isSlot}
+            />
+        }
       </Calrendar>
       <ButtonContainer>
         <Button

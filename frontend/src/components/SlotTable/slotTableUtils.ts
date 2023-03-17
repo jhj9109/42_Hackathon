@@ -105,3 +105,16 @@ export const setTileClass = (state: number) => {
   }
   return className;
 }
+
+export const sampleOpenSlots: Session[] = [
+  {
+    sessionId: 1,
+    startTime: "2023/03/18/09:00",
+    endTime: "2023/03/18/12:00",
+    tags: [{tagId: 1, tagName: "libft"}]},
+  {
+    sessionId: 2,
+    startTime: "2023/03/18/15:00",
+    endTime: "2023/03/18/18:00",
+    tags: [{tagId: 2, tagName: "gnl"}]},
+]
