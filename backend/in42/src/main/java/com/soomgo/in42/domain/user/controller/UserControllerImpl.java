@@ -14,6 +14,7 @@ import com.soomgo.in42.global.exception.entity.ExceptionResponse;
 import com.soomgo.in42.global.util.CookieUtil;
 import com.soomgo.in42.global.util.HeaderUtil;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.hibernate.sql.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,12 +57,47 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(value = "/questions")
+    public UserDto findUserQuestions(HttpServletRequest request) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return user;
+    }
+
     @PostMapping(value = "/question")
     public ResponseEntity<ExceptionResponse> createUserQuestion(HttpServletRequest request, CreateUserQuestionRequestDto createQuestionDto) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
         UpdateQuestionTagDto updateQuestionTagDto = questionService.createQuestion(user, createQuestionDto);
         tagService.updateQuestionTag(updateQuestionTagDto);
         return ResponseEntity.ok().build();
+    }
+    @PostMapping(value = "/question/{seasonId}")
+    public ResponseEntity<ExceptionResponse> createUserQuestionToSession(HttpServletRequest request, CreateUserQuestionRequestDto createQuestionDto) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/sessions")
+    public UserDto findUserSession(HttpServletRequest request) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return user;
+    }
+
+    @PostMapping(value = "/session")
+    public ResponseEntity<ExceptionResponse> createUserSession(HttpServletRequest request) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/matchs")
+    public UserDto findUserMatchs(HttpServletRequest request) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return user;
+    }
+
+    @GetMapping(value = "/{userId}/detail")
+    public UserDto findOtherUserDetail(HttpServletRequest request) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return user;
     }
 }
 
