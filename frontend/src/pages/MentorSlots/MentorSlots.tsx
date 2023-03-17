@@ -5,7 +5,6 @@ import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
 import { isSlot, notSlot, sampleOpenSlots, updateSelected } from '../../components/SlotTable/slotTableUtils';
-import { isSlot, sampleOpenSlots, updateSelected } from '../../components/SlotTable/slotTableUtils';
 
 const ButtonContainer = styled.div`
   width: 100%;
@@ -46,7 +45,7 @@ const MentoringContentContainer = styled.div`
   justify-content: space-around;
 `;
 
-const Tag = styled.p`
+const Tag = styled.div`
   width: 100%;
   text-align: start;
   font-size: 1.2rem;
@@ -70,19 +69,21 @@ interface ExpandedTag {
 const sampleExpandedTag: ExpandedTag[] = [
   { tag: {tagId: 1, tagName: "Libft"}, selected: true },
   { tag: {tagId: 2, tagName: "Gnl"}, selected: true },
-  { tag: {tagId: 3, tagName: "33333333"}, selected: true },
-  { tag: {tagId: 4, tagName: "44444444"}, selected: true },
-  { tag: {tagId: 5, tagName: "55555555"}, selected: true },
-  { tag: {tagId: 6, tagName: "666666666"}, selected: true },
-  { tag: {tagId: 7, tagName: "77777777"}, selected: true },
-  { tag: {tagId: 8, tagName: "88888888"}, selected: true },
-  { tag: {tagId: 9, tagName: "99999999"}, selected: true },
-  { tag: {tagId: 10, tagName: "101010101010101010"}, selected: true },
-  { tag: {tagId: 11, tagName: "1111111111111111111"}, selected: true },
-  { tag: {tagId: 12, tagName: "1212121212121212112"}, selected: true },
-  { tag: {tagId: 13, tagName: "131313131313131313"}, selected: true },
-  { tag: {tagId: 14, tagName: "14141414141414141"}, selected: true },
+  { tag: {tagId: 3, tagName: "33333333"}, selected: false },
+  { tag: {tagId: 4, tagName: "44444444"}, selected: false },
+  { tag: {tagId: 5, tagName: "55555555"}, selected: false },
+  { tag: {tagId: 6, tagName: "666666666"}, selected: false },
+  { tag: {tagId: 7, tagName: "77777777"}, selected: false },
+  { tag: {tagId: 8, tagName: "88888888"}, selected: false },
+  { tag: {tagId: 9, tagName: "99999999"}, selected: false },
+  { tag: {tagId: 10, tagName: "101010101010101010"}, selected: false },
+  { tag: {tagId: 11, tagName: "1111111111111111111"}, selected: false },
+  { tag: {tagId: 13, tagName: "131313131313131313"}, selected: false },
+  { tag: {tagId: 14, tagName: "14141414141414141"}, selected: false },
 ]
+
+const isSubmitAvaiable = (tags: ExpandedTag[], selected: Set<number>) =>
+  tags.some((t) => t.selected) && selected.size !== 0
 
 const TagList = ({ tags, onChange }: {tags: ExpandedTag[], onChange: any}) => {
   return (
@@ -119,6 +120,35 @@ const MenteeMentorSlots = () => {
       prev.map(t =>
         t.tag.tagId === tag.tagId ? {...t, selected: !t.selected} : t))
   }
+
+  const setToArr = function<T>(s: Set<T>) {
+    const arr: T[] = [];
+    const iter = s.values();
+    for (let i = 0; i < s.size; i++) {
+      arr.push(iter.next().value);
+    }
+    return arr;
+  }
+  const isContinuousSlot = (sortedSlot: number[]) => 
+    sortedSlot.every((el, i, arr) => i === 0 || arr[i - 1] + 1 === el)
+  
+  
+  const onSubmit = () => {
+    if (!(isSubmitAvaiable(tags, selected))) {
+      alert("올바르지 못한 시도입니다.");
+      return;
+    }
+    const sorted = setToArr(selected).sort((a, b) => a -b);
+    if (!isContinuousSlot(sorted)) {
+      alert("연속된 슬롯만 가능합니다.");
+      return;
+    }
+    const filterd = tags.filter(t => t.selected).map(t => t.tag);
+    console.log("===============요청 보낼 데이터===============");
+    console.log(sorted)
+    console.log(filterd)
+    console.log("=======================================")
+  }
   useEffect(() => {
     setTimeout(() => setOpenSlots(sampleOpenSlots))
   })
@@ -144,7 +174,7 @@ const MenteeMentorSlots = () => {
         <TagList tags={tags} onChange={onTagSelectedChange}/>
       </MentoringContentContainer>
       <ButtonContainer>
-        <Button size="large" disabled={!submitAbled} onClick={() => navigator('/')}>
+        <Button size="large" disabled={!submitAbled} onClick={() => onSubmit()}>
           멘토링 시간 선택 완료
         </Button>
       </ButtonContainer>
