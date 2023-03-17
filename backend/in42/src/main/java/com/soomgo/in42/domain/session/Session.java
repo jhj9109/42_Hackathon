@@ -33,6 +33,14 @@ public class Session extends BaseTimeEntity {
     @Column(name = "end_time")
     private Date endTime;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mento_user_id", insertable = false, updatable = false)
+    private User mentoUser;
+
+    @OneToMany(mappedBy = "session")
+    private List<Question> questions = new ArrayList<>();
+
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "session_tag",

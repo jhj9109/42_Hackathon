@@ -16,6 +16,6 @@ public class ApplicationYmlRead {
         return web.get("frontUrl");
     }
     public String getFrontLoginUrl() {
-        return web.get("frontUrl") + "/login";
+        return web.get("frontUrl");
     }
 }

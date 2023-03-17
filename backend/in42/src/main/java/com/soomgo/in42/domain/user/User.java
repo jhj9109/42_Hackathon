@@ -1,6 +1,8 @@
 package com.soomgo.in42.domain.user;
 
 import com.soomgo.in42.domain.comment.Comment;
+import com.soomgo.in42.domain.qustion.Question;
+import com.soomgo.in42.domain.session.Session;
 import com.soomgo.in42.domain.tag.Tag;
 import com.soomgo.in42.global.type.RoleType;
 import com.soomgo.in42.global.util.BaseTimeEntity;
@@ -47,6 +49,13 @@ public class User extends BaseTimeEntity implements Serializable {
     @Column(name = "total_exp")
     private Integer totalExp;
 
+    @OneToMany(mappedBy = "mentoUser")
+    private List<Session> sessions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "menteeUser")
+    private List<Question> questions = new ArrayList<>();
+
+    @Setter
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_tag",

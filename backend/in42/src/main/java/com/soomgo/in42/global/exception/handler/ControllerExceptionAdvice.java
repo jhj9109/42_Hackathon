@@ -20,10 +20,10 @@ public class ControllerExceptionAdvice {
 
     @ExceptionHandler(AccessException.class)
     protected ResponseEntity<ExceptionResponse> customAccessExceptionHandle(AccessException ex) throws URISyntaxException {
-        //String message = messageSource.getMessage(filter(ex.getRedirectUrl()), null, Locale.KOREA);
         URI redirectUri = new URI(applicationYmlRead.getFrontLoginUrl());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(redirectUri);
+        System.out.println("이동함!! : " + redirectUri);
         return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 }

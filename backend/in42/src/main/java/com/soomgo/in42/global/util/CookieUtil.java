@@ -10,6 +10,21 @@ import java.util.Base64;
 import java.util.Optional;
 
 public class CookieUtil {
+
+    private static final String ACCESS_TOKEN = "access_token";
+
+    public static String getAccessToken(HttpServletRequest request)
+    {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(ACCESS_TOKEN)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
 

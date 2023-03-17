@@ -35,6 +35,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final String REDIRECT_URI_PARAM_COOKIE_NAME = "redirect_uri";
+
+    private final String ACCESS_TOKEN = "access_token";
     private final String REFRESH_TOKEN = "refresh_token";
     private final AuthTokenProvider tokenProvider;
     private final UserRepository userRepository;
@@ -45,14 +47,67 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
+        String finalUrl = determineTargetUrl(request, response, authentication);
+
+        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+                .map(Cookie::getValue);
+        if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+            throw new IllegalArgumentException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
+        }
+        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+
+        OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+        ProviderType providerType = ProviderType.keyOf (authToken.getAuthorizedClientRegistrationId().toUpperCase());
+
+        OidcUser user = ((OidcUser) authentication.getPrincipal());
+        OAuthUserInfo userInfo = OAuthUserInfoFactory.getOAuth2UserInfo(providerType, user.getAttributes());
+        Collection<? extends GrantedAuthority> authorities = ((OidcUser) authentication.getPrincipal()).getAuthorities();
+
+        RoleType roleType = hasAuthority(authorities, RoleType.ADMIN.getKey()) ? RoleType.ADMIN : RoleType.USER;
+
+        Date now = new Date();
+        AuthToken accessToken = tokenProvider.createAuthToken(
+                userInfo.getIntraId(),
+                roleType.getKey(),
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+        );
+
+        // refresh 토큰 설정
+        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+
+        AuthToken refreshToken = tokenProvider.createAuthToken(
+                appProperties.getAuth().getTokenSecret(),
+                new Date(now.getTime() + refreshTokenExpiry)
+        );
+
+        // DB 저장
+        User saveUser = userRepository.findByIntraId(userInfo.getIntraId()).orElseThrow();
+
+        Token userRefreshToken = userRefreshTokenRepository.findByUser(saveUser);
+        if (userRefreshToken != null) {
+            userRefreshToken.setRefreshToken(refreshToken.getToken());
+            userRefreshTokenRepository.save(userRefreshToken);
+        } else {
+            userRefreshToken = new Token(saveUser, refreshToken.getToken(), accessToken.getToken());
+            userRefreshTokenRepository.saveAndFlush(userRefreshToken);
+        }
+
+
+        int cookieMaxAge = (int) refreshTokenExpiry / 60;
+
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
+        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge + 60 * 60 * 24);
+
+        finalUrl = UriComponentsBuilder.fromUriString(applicationYmlRead.getFrontUrl() + "/test")
+//                .queryParam("token", userRefreshToken == null ? accessToken.getToken() : userRefreshToken.getAccessToken())
+                .build().toUriString();
 
         if (response.isCommitted()) {
-            logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
+            logger.debug("Response has already been committed. Unable to redirect to " + finalUrl);
             return;
         }
         clearAuthenticationAttributes(request, response);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, finalUrl);
     }
 
     @Override
@@ -103,11 +158,10 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
 
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
+        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge);
 
         return UriComponentsBuilder.fromUriString(applicationYmlRead.getFrontUrl())
-//                return UriComponentsBuilder.fromUriString("https://42byte.kr")
                 .queryParam("token", userRefreshToken == null ? accessToken.getToken() : userRefreshToken.getAccessToken())
                 .build().toUriString();
     }

@@ -13,7 +13,6 @@ public class UserDto {
     private String email;
     private String imageUri;
     private RoleType roleType;
-    private Integer ppp;
     private Integer totalExp;
 
     public static UserDto from(User user) {
@@ -31,5 +30,17 @@ public class UserDto {
                     .build();
         }
         return userDto;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "id=" + id +
+                ", intraId='" + intraId + '\'' +
+                ", email='" + email + '\'' +
+                ", imageUri='" + imageUri + '\'' +
+                ", roleType=" + roleType +
+                ", totalExp=" + totalExp +
+                '}';
     }
 }
