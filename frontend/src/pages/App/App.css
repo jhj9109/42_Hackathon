@@ -1,19 +1,33 @@
 .App {
+  font-family: 'Jua', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Sofia Sans', sans-serif;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+  justify-content: center; /* 중앙 정렬 */
+  /* align-items: center; */
+  background-color: #fafafa;
 }
 
 .body {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* 헤더와 푸터가 끝에 붙음*/
   flex-direction: column;
-  background-color: #d9d9d9;
-  width: 35vw;
-  height: 100vh;
+  background-color: white;
+  height: 100vh; /* 상하 가득 채우기 */
+  width: 100%;
+  max-width: 30rem; /* 좌우 최대 크기 */
+}
+
+.main {
+  height: 81vh;
+  width: 96%;
+  display: flex;
+  flex-direction: column;
+  /* 아이템들을 굳이 중앙 정렬 할 필요 없다. */
+  /* justify-content: center; */
+  align-items: center;
+  position: relative; /* for 플로팅 버튼*/
 }
 
 .common {
@@ -24,20 +38,21 @@
 }
 
 .header {
-  height: 8%;
-  background-color: #cc55cc;
-}
-
-.main {
-  height: 81%;
-  width: 96%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  height: 8vh;
+  background-color: #292d39;
+  color: white;
+  font-size: 3rem;
+  display: grid;
+  grid-template: 1fr / repeat(3, 1fr);
 }
 
 .footer {
-  height: 8%;
-  background-color: #cc55cc;
+  height: 8vh;
+  background-color: #292d39;
+  color: white;
+}
+
+button {
+  border: none;
+  background: none;
 }

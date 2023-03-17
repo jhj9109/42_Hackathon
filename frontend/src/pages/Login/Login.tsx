@@ -1,18 +1,41 @@
 import React from 'react';
-import { Button, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import styled from 'styled-components';
+import Button from '../../components/Button/Button';
+import FlexBox from '../../components/FlexBox/FlexBox';
+import logo from '../../assets/42in_logo.png';
+
+const Div = styled.div`
+  background-color: #fafafa;
+  color: #292d39;
+  height: 45%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 7rem;
+  border-radius: 0.5rem;
+`;
 
 const Login = () => {
   const navigator = useNavigate();
 
   return (
-    <Stack gap={3} className="Login">
-      <div className="Login-Logo">42in</div>
-      <Button size="lg" className="Login-Button" onClick={() => navigator('/')}>
+    <FlexBox
+      flexDirection="column"
+      width="98%"
+      height="100%"
+      justifyContent="center"
+      alignItems="center"
+      gap="1vh"
+    >
+      <Div>
+        <img src={logo} />
+      </Div>
+      <Button size="large" onClick={() => navigator('/')}>
         로그인
       </Button>
-    </Stack>
+    </FlexBox>
   );
 };
 

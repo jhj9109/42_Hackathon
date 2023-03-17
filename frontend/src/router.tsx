@@ -8,6 +8,7 @@ import MenteeMentors from './pages/MenteeMentors/MenteeMentors';
 import MenteeMentorSlots from './pages/MenteeMentorSlots/MenteeMentorSlots';
 import MenteeSlots from './pages/MenteeSlots/MenteeSlots';
 import MenteeSlotsMentoring from './pages/MenteeSlotsMentoring/MenteeSlotsMentoring';
+import MentoringLog from './pages/MentoringLog/MentoringLog';
 import MentorSlots from './pages/MentorSlots/MentorSlots';
 
 const router = createBrowserRouter([
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: 'mentee/mentors/:mentorId/mentoring',
         element: <MenteeMentorMentoring />,
+      },
+      {
+        path: 'mentoring-log/:id',
+        element: <MentoringLog />,
       },
       {
         path: '*',
