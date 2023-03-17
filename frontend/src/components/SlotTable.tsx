@@ -1,59 +1,8 @@
 import React, { useState } from 'react';
 import './SlotTable.css';
 
-const TEXT_COLOR = '#02c4c7';
-
-const TILE_WIDTH = '90px';
-
-const RAW_HEADER_WIDTH = '87px';
-
-const TILE_WIDTH_PERCENT = 11.5;
-
+// const TEXT_COLOR = '#02c4c7';
 const ADJUSTMENT_MINUTES = 15;
-
-const myStyle = {
-  // width: TILE_WIDTH,
-  // color: TEXT_COLOR,
-};
-
-const tableContainerStyle = {
-  width: "100%",
-};
-
-const tableStyle = {
-  // Text
-  color: TEXT_COLOR,
-  width: '100%', // 양옆 꽉차도록
-  borderCollapse: 'collapse' as any, // 보더간 경계는 하나
-  border: '0.0625rem gray solid', // 테이블테두리
-  borderSpacing: '0px', // 셀간 간격
-  // nowrap으로 인해 칸의 크기가 변형 되어서 삭제 => 차라리 줄 바꿈이 나음
-};
-
-const tableHeaderStyle = {
-  // 날짜가 적히는 첫 라인. 높이는 글자 크기에 의존한다.
-  border: '0.0625rem #ddd solid', // 테이블헤드테두리
-  textAlign: "center" as any,
-  verticalAlign: "middle",
-};
-
-const tableBodyStyle = {
-  height: '3vh',
-  // border: "1px gray solid",// 바디라인별테두리
-};
-
-const rowHeaderStyle = {
-  whiteSpace: "nowrap" as any,
-  textAlign: "center" as any,
-  verticalAlign: "middle",
-  width: `${100 - TILE_WIDTH_PERCENT * 7}%`,
-  padding: '0.0625rem 0.5rem',
-  border: '0.0625rem #ddd solid', // 바디라인별 헤드의 테두리
-};
-const tileStyle = {
-  border: '0.0625rem #ddd solid', // 바디라인별 타일별의 테두리
-  width: `${TILE_WIDTH_PERCENT}%`,
-};
 
 const dayString: { [key: string]: string } = {
   0: 'Mon',
@@ -72,6 +21,46 @@ const TILE_STATE = {
   SELECTED: 1 << 3,
 };
 
+interface Tag {
+  tagId: number;
+  tagName: string;
+}
+interface Session {
+  sessionId : number;
+  startTime: string;
+  endTime: string;
+  tags: Tag[];
+}
+interface IsSelectableParams {
+  rowIndex: number;
+  colIndex: number;
+  openSlots: Session[];
+  currDate: Date;
+}
+interface IsClampParams {
+  rowIndex: number;
+  colIndex: number;
+  currDate: Date;
+  startTime: string;
+  endTime: string;
+}
+
+interface SlotTableProps {
+  currDate: Date;
+  openSlots: Session[];
+  isSeletable: (param: IsSelectableParams) => boolean
+}
+
+
+type HandleSelect = (rowIndex: number, colIndex: number) => void;
+const updateSelected = function <T>(prev: Set<T>, el: T) {
+  const newSet = new Set(prev);
+  if (!newSet.delete(el)) {
+    newSet.add(el);
+  }
+  return newSet;
+};
+
 const getDayString = (day: number) => dayString[day % 7];
 const getHeaderStr = (rowIndex: number) =>
   rowIndex % 2 ? '' : `${rowIndex / 2}:00` + (rowIndex > 24 ? ' pm' : ' am');
@@ -81,13 +70,46 @@ const getString = (date: Date) =>
     .replace('. ', '/')
     .replace('.', '')}`;
 
-export default function SlotTable() {
-  const currDate = new Date();
+
+    const utcOffset = 9 * 60 * 60 * 1000; // UTC+9
+    const getKstDate = (date: Date) => new Date(date.getTime() + utcOffset)
+    
+    const isClamp = ({rowIndex, colIndex, currDate, startTime, endTime}: IsClampParams) => {
+      // 2023-03-17T05:30:17.828Z
+    
+      const target = new Date(
+          currDate.getFullYear(),
+          currDate.getMonth(),
+          currDate.getDate() + colIndex,
+          Math.floor(rowIndex / 2),
+          (rowIndex % 2) * 30
+       );
+      const start = new Date(startTime)
+      const end = new Date(endTime)
+      
+      const [sTime, tTime, eTime] = [
+        start.getTime() / (60 * 1000),
+        target.getTime() / (60 * 1000),
+        end.getTime() / (60 * 1000)
+      ]
+      
+      return (sTime <= tTime && tTime <= eTime);
+    }
+    
+
+const isSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
+  openSlots.some(session => isClamp({rowIndex, colIndex, currDate, startTime: session.startTime, endTime:session.endTime}))
+
+export default function SlotTable({currDate, openSlots, isSeletable}: SlotTableProps) {
+  // 지난 시간.
+  // 열린 슬롯.
+  // 셀렉터블.
+  console.log(openSlots);
   return (
     <div className='tableContainer'>
       <table className="slotTable">
         <SlotTableHeaders currDate={currDate} />
-        <SlotTableBody currDate={currDate} />
+        <SlotTableBody currDate={currDate} openSlots={openSlots}/>
       </table>
     </div>
   );
@@ -111,16 +133,8 @@ function SlotTableHeaders({ currDate }: { currDate: Date }) {
     </thead>
   );
 }
-type HandleSelect = (rowIndex: number, colIndex: number) => void;
 
-const updateSelected = function <T>(prev: Set<T>, el: T) {
-  const newSet = new Set(prev);
-  if (!newSet.delete(el)) {
-    newSet.add(el);
-  }
-  return newSet;
-};
-function SlotTableBody({ currDate }: { currDate: Date }) {
+function SlotTableBody({ currDate, openSlots }: { currDate: Date, openSlots: Session[] }) {
   const [selected, setSelected] = useState(() => new Set<number>());
   const handleSelect = (rowIndex: number, colIndex: number) =>
     setSelected((prev) => {
@@ -136,6 +150,7 @@ function SlotTableBody({ currDate }: { currDate: Date }) {
           currDate={currDate}
           selected={selected}
           handleSelect={handleSelect}
+          openSlots={openSlots}
         />
       ))}
     </tbody>
@@ -147,11 +162,13 @@ function SlotTableRow({
   currDate,
   selected,
   handleSelect,
+  openSlots,
 }: {
   rowIndex: number;
   currDate: Date;
   selected: Set<number>;
   handleSelect: HandleSelect;
+  openSlots: Session[];
 }) {
   const firstCell =
     currDate.getHours() * 2 +
@@ -169,7 +186,10 @@ function SlotTableRow({
     if (selected.has(i)) {
       state |= TILE_STATE.SELECTED;
     }
-    // 슬록 여부는 아직.
+    // 슬록 여부
+    if (isSlot({rowIndex, colIndex, openSlots, currDate})) {
+      state |= TILE_STATE.SLOTS;
+    }
     return state;
   };
   return (
