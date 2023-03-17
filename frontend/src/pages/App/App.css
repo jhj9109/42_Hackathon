@@ -27,7 +27,7 @@
   /* 아이템들을 굳이 중앙 정렬 할 필요 없다. */
   /* justify-content: center; */
   align-items: center;
-  position: relative;/* for 플로팅 버튼*/
+  position: relative; /* for 플로팅 버튼*/
 }
 
 .common {
@@ -41,8 +41,10 @@
   height: 8vh;
   background-color: #292d39;
   color: white;
+  font-size: 3rem;
+  display: grid;
+  grid-template: 1fr / repeat(3, 1fr);
 }
-
 
 .footer {
   height: 8vh;

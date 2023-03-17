@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface Props {
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   size: 'small' | 'middle' | 'large';
 }
 

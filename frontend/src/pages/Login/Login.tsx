@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../../components/Button/Button';
 import FlexBox from '../../components/FlexBox/FlexBox';
+import logo from '../../assets/42in_logo.png';
 
 const Div = styled.div`
   background-color: #fafafa;
@@ -28,7 +29,9 @@ const Login = () => {
       alignItems="center"
       gap="1vh"
     >
-      <Div>42in</Div>
+      <Div>
+        <img src={logo} />
+      </Div>
       <Button size="large" onClick={() => navigator('/')}>
         로그인
       </Button>

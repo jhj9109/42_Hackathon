@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { getRequest } from '../../api/axios';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
+import Modal from '../../components/Modal/Modal';
 
 const HomeStyle = styled.div`
   width: 100%;
@@ -58,42 +60,65 @@ const Question = styled.button`
 
 const Home = () => {
   const navigator = useNavigate();
+  const [isQuestionOpen, setIsQuestionOpen] = useState(false);
+  const [isMentoringOpen, setIsMentoringOpen] = useState(false);
+  const onOpenQuestion = () => {
+    setIsQuestionOpen(true);
+  };
+  const onOpenMentoring = () => {
+    setIsQuestionOpen(true);
+  };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const response = await getRequest('user/detail');
+  //       console.log(response);
+  //     } catch (e: any) {
+  //       console.log(e);
+  //     }
+  //   })();
+  // }, []);
 
   return (
-    <HomeStyle>
-      <ButtonGroup>
-        <Button size="small" onClick={() => navigator('/mentee/mentors')}>
-          멘티 슬롯
-        </Button>
-        <Button size="small" onClick={() => navigator('/mentor/slots')}>
-          멘토 슬롯
-        </Button>
-      </ButtonGroup>
-      <HomeContainer>
-        <Row>
-          <P>kangkim님의 minishell 멘토링 16시 30분</P>
-          <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
-          <Emoji onClick={() => alert('mentoring cancel modal')}>❌</Emoji>
-        </Row>
-        <Row>
-          <P>kangkim님의 minishell 멘토링 16시 30분</P>
-          <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
-          <Emoji onClick={() => alert('mentoring cancel modal')}>❌</Emoji>
-        </Row>
-      </HomeContainer>
-      <HomeContainer>
-        <Row>
-          <Question onClick={() => alert('Mentoring Modal')}>
-            minishell 파이프 설정법을 모르겠습니다. hyeonjan now
-          </Question>
-        </Row>
-        <Row>
-          <Question onClick={() => alert('Mentoring Modal')}>
-            minishell 파이프 설정법을 모르겠습니다. hyeonjan now
-          </Question>
-        </Row>
-      </HomeContainer>
-    </HomeStyle>
+    <>
+      <HomeStyle>
+        <ButtonGroup>
+          <Button size="small" onClick={() => navigator('/mentee/mentors')}>
+            멘티 슬롯
+          </Button>
+          <Button size="small" onClick={() => navigator('/mentor/slots')}>
+            멘토 슬롯
+          </Button>
+        </ButtonGroup>
+        <HomeContainer>
+          <Row>
+            <P>kangkim님의 minishell 멘토링 16시 30분</P>
+            <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
+            <Emoji onClick={onOpenMentoring}>❌</Emoji>
+          </Row>
+          <Row>
+            <P>kangkim님의 minishell 멘토링 16시 30분</P>
+            <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
+            <Emoji onClick={onOpenMentoring}>❌</Emoji>
+          </Row>
+        </HomeContainer>
+        <HomeContainer>
+          <Row>
+            <Question onClick={onOpenQuestion}>
+              minishell 파이프 설정법을 모르겠습니다. hyeonjan now
+            </Question>
+          </Row>
+          <Row>
+            <Question onClick={onOpenQuestion}>
+              minishell 파이프 설정법을 모르겠습니다. hyeonjan now
+            </Question>
+          </Row>
+        </HomeContainer>
+      </HomeStyle>
+      {isQuestionOpen && <Modal onClose={() => setIsQuestionOpen(false)} />}
+      {isMentoringOpen && <Modal onClose={() => setIsMentoringOpen(false)} />}
+    </>
   );
 };
 
