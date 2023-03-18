@@ -102,10 +102,6 @@ const MenteeSlots = () => {
       </Calrendar>
       <ButtonContainer>
       <Button size="large" disabled={!submitAbled} onClick={() => onSubmit()}>
-        {/* <Button
-          size="large"
-          onClick={() => navigator('/mentee/slots/mentoring')}
-        > */}
           멘토링 시간 선택 완료
         </Button>
       </ButtonContainer>
