@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { postRequest } from '../../api/axios';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
-import { isSlot, notSlot, sampleOpenSlots, updateSelected } from '../../components/SlotTable/slotTableUtils';
+import { isContinuousSlot, notSlot, sampleOpenSlots, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
 
 const ButtonContainer = styled.div`
   width: 100%;
@@ -63,6 +64,14 @@ interface ExpandedTag {
   selected: boolean;
 }
 
+interface Data {
+  startTime: string;
+  endTime: string;
+  tags: Tag[];
+}
+
+const USER_SESSION_PATH = "user/session";
+
 // const convertExpandedTag = (tags: Tag[]): ExpandedTag[] => tags.map(tag => ({tag, selected: false}));
 // const setInitialTags = () => convertExpandedTag(useRecoilValue(userInfoAtom2).tags)
 
@@ -111,8 +120,9 @@ const MenteeMentorSlots = () => {
   const [selected, setSelected] = useState(() => new Set<number>());
   const handleSelect = (rowIndex: number, colIndex: number) =>
     setSelected((prev) => updateSelected(prev, rowIndex + colIndex * 48))
+  // TODO: 어디선가 태그 정보 가져오기
   // const [tags, setTags] = useState(setInitialTags());
-  const [tags, setTags] = useState(sampleExpandedTag); // TODO: for test
+  const [tags, setTags] = useState(sampleExpandedTag); 
   const [submitAbled, setSubmitAbled] = useState(false);
   
   const onTagSelectedChange = (tag: Tag) => {
@@ -121,40 +131,54 @@ const MenteeMentorSlots = () => {
         t.tag.tagId === tag.tagId ? {...t, selected: !t.selected} : t))
   }
 
-  const setToArr = function<T>(s: Set<T>) {
-    const arr: T[] = [];
-    const iter = s.values();
-    for (let i = 0; i < s.size; i++) {
-      arr.push(iter.next().value);
-    }
-    return arr;
-  }
-  const isContinuousSlot = (sortedSlot: number[]) => 
-    sortedSlot.every((el, i, arr) => i === 0 || arr[i - 1] + 1 === el)
+  const calSubmitAbled = (tags: ExpandedTag[], selected: Set<number>) =>
+    selected.size !== 0 && tags.some((t) => t.selected);
   
+  const slotCompareFn = (el: number, i: number, arr: number[]) =>
+    i === 0 || arr[i - 1] + 1 === el
   
-  const onSubmit = () => {
+  const setData = (sortedSlot: number[], currDate: Date, filterdTags: Tag[]) =>
+    ((t: string[], tags): Data =>
+      ({startTime: t[0], endTime: t[1], tags}))(
+        sortedSlotToTime(sortedSlot, currDate), filterdTags
+      );
+    
+  const onSubmit = async () => {
     if (!(isSubmitAvaiable(tags, selected))) {
       alert("올바르지 못한 시도입니다.");
       return;
     }
-    const sorted = setToArr(selected).sort((a, b) => a -b);
-    if (!isContinuousSlot(sorted)) {
+    const sortedSlot = setToArr(selected).sort((a, b) => a -b);
+    const filteredTags = tags.filter(t => t.selected).map(t => t.tag);
+    if (!isContinuousSlot(sortedSlot, slotCompareFn)) {
       alert("연속된 슬롯만 가능합니다.");
       return;
     }
-    const filterd = tags.filter(t => t.selected).map(t => t.tag);
+    const data = setData(sortedSlot, currDate, filteredTags);
     console.log("===============요청 보낼 데이터===============");
-    console.log(sorted)
-    console.log(filterd)
-    console.log("=======================================")
+    console.log(data);
+    // TODO: axios 요청만들기
+    // try {
+    //   const response = await postRequest(USER_SESSION_PATH, data);
+    //   // 성공이라면
+    //   console.log(response);
+    //   alert("멘토링 슬롯 등록에 성공하였습니다.");
+    //   navigator("/");
+    // } catch (error) {
+    //   console.error(error);
+    //   alert("멘토링 슬롯 등록에 실패하였습니다.");
+    // }
+    console.log("==========================================");
+
   }
+
   useEffect(() => {
+    // TODO: axios 요청 
     setTimeout(() => setOpenSlots(sampleOpenSlots))
   })
 
   useEffect(() => {
-    setSubmitAbled(tags.some((t) => t.selected) && selected.size !== 0);
+    setSubmitAbled(calSubmitAbled(tags, selected));
   }, [tags, selected])
   
   return (
