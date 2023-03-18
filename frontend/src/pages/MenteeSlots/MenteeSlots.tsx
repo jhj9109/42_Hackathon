@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { MENTEE_SLOTS_NEXT_STEP_URL, USER_SESSION_POST_PATH } from '../../api/uri';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
-import { isSlot, sampleOpenSlots, updateSelected } from '../../components/SlotTable/slotTableUtils';
+import { isContinuousSlot, isSlot, notSlot, sampleOpenSlots, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
 
 const ButtonContainer = styled.div`
   width: 100%;
@@ -38,17 +39,52 @@ const Calrendar = styled.div`
 
 const MenteeSlots = () => {
   const navigator = useNavigate();
+  const currDate = new Date();
+  const [loading, setLoading] = useState(true);
 
   // TODO
-  const currDate = new Date();
-  const [openSlots, setOpenSlots] = useState<Session[]>([])
+  // axios 요청을 통해? 가져와야할 정보
+  const [openSlots, setOpenSlots] = useState<Session[] | null>(null)
+  
   const [selected, setSelected] = useState(() => new Set<number>());
+  const [submitAbled, setSubmitAbled] = useState(false);
+  
   const handleSelect = (rowIndex: number, colIndex: number) =>
     setSelected((prev) => updateSelected(prev, rowIndex + colIndex * 48))
 
+  const calSubmitAbled = (selected: Set<number>) => selected.size !== 0
+  
+  const calIsLoading = (openSlots: Session[] | null) => openSlots === null;
+  
+  const slotCompareFn = (el: number, i: number, arr: number[]) =>
+    i === 0 || arr[i - 1] + 1 === el;
+  
+  const onSubmit = () => {
+    if (!(calSubmitAbled(selected))) {
+      alert("올바르지 못한 시도입니다.");
+      return;
+    }
+    const sortedSlot = setToArr(selected).sort((a, b) => a -b);
+    if (!isContinuousSlot(sortedSlot, slotCompareFn)) {
+      alert("연속된 슬롯만 가능합니다.");
+      return;
+    }
+    const [startTime, endTime] = sortedSlotToTime(sortedSlot, currDate);
+    navigator(MENTEE_SLOTS_NEXT_STEP_URL + "?startTime=" + startTime + "&endTime=" + endTime);
+  }
+
   useEffect(() => {
-    setTimeout(() => setOpenSlots(sampleOpenSlots))
-  })
+    // TODO: axios 요청
+    setTimeout(() => setOpenSlots(sampleOpenSlots), 500);
+  }, [])
+
+  useEffect(() => {
+    setSubmitAbled(calSubmitAbled(selected));
+  }, [selected])
+
+  useEffect(() => {
+    setLoading(calIsLoading(openSlots))
+  }, [openSlots])
   
   return (
     <MenteeSlotsStyle>
@@ -58,17 +94,18 @@ const MenteeSlots = () => {
           : <SlotTable
               currDate={currDate}
               openSlots={openSlots}
-              isSelectable={isSlot}
+              isSelectable={notSlot}
               selected={selected}
               onSelect={handleSelect}
             />
         }
       </Calrendar>
       <ButtonContainer>
-        <Button
+      <Button size="large" disabled={!submitAbled} onClick={() => onSubmit()}>
+        {/* <Button
           size="large"
           onClick={() => navigator('/mentee/slots/mentoring')}
-        >
+        > */}
           멘토링 시간 선택 완료
         </Button>
       </ButtonContainer>

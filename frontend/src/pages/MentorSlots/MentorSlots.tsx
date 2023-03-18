@@ -172,7 +172,6 @@ const MenteeMentorSlots = () => {
   }, [tags, selected])
 
   useEffect(() => {
-    console.log("tags & openSlots & tf", tags, openSlots, calIsLoading(tags, openSlots));
     setLoading(calIsLoading(tags, openSlots))
   }, [tags, openSlots])
   
