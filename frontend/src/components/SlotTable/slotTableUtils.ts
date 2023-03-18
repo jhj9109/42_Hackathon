@@ -63,7 +63,7 @@ export const isClamp = ({rowIndex, colIndex, currDate, startTime, endTime}: IsCl
     
 
 export const isSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
-  openSlots.some(session => isClamp({rowIndex, colIndex, currDate, startTime: session.startTime, endTime:session.endTime}))
+  !!openSlots?.some(session => isClamp({rowIndex, colIndex, currDate, startTime: session.startTime, endTime:session.endTime}))
 
 export const notSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
   !isSlot({rowIndex, colIndex, openSlots, currDate});
@@ -71,13 +71,17 @@ export const notSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableP
 export const isElapsed = (rowIndex: number, colIndex: number, currDate: Date) =>
   colIndex === 0 && rowIndex < (currDate.getHours() * 2 + Math.ceil((Number(currDate.getMinutes()) + ADJUSTMENT_MINUTES) / 30));
 export const setState = (
-  rowIndex: number, colIndex: number, currDate: Date, openSlots: Session[], selected: Set<number>, isSelectable: FunctionIsSelectable): number => {
+  rowIndex: number, colIndex: number, currDate: Date, openSlots: Session[] | null, selected: Set<number>, isSelectable: FunctionIsSelectable): number => {
   const i = rowIndex + colIndex * 48;
   let state = 0;
   if (isElapsed(rowIndex, colIndex, currDate)) {
     state |= TILE_STATE.ELAPSED;
     return state;
   } else {
+    // 로딩중isSelectable
+    if (openSlots === null) {
+      return state;
+    }
     // 일단은 전부 셀렉터블
     if (isSelectable({rowIndex, colIndex, openSlots, currDate})) {
       state |= TILE_STATE.SELECTABLE;

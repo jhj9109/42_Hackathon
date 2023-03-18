@@ -1,0 +1,1 @@
+export const USER_SESSION_POST_PATH = "user/session";

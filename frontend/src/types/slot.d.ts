@@ -2,6 +2,11 @@ interface Tag {
   tagId: number;
   tagName: string;
 }
+interface ExpandedTag {
+  tag: Tag;
+  selected: boolean;
+}
+
 interface Session {
   sessionId : number;
   startTime: string;
@@ -11,7 +16,7 @@ interface Session {
 interface IsSelectableParams {
   rowIndex: number;
   colIndex: number;
-  openSlots: Session[];
+  openSlots: Session[] | null;
   currDate: Date;
 }
 interface IsClampParams {
@@ -26,7 +31,7 @@ type FunctionIsSelectable = (param: IsSelectableParams) => boolean;
 
 interface SlotTableProps {
   currDate: Date;
-  openSlots: Session[];
+  openSlots: Session[] | nulll;
   isSelectable: (param: IsSelectableParams) => boolean
   selected: Set<number>;
   onSelect: (rowIndex: number, colIndex: number) => void;
@@ -36,7 +41,7 @@ type HandleSelect = (rowIndex: number, colIndex: number) => void;
 
 interface SlotTableBodyProps {
   currDate: Date;
-  openSlots: Session[];
+  openSlots: Session[] | null;
   isSelectable: FunctionIsSelectable;
   selected: Set<number>;
   onSelect: (rowIndex: number, colIndex: number) => void;
@@ -47,7 +52,7 @@ interface SlotTableRowProps {
   currDate: Date;
   selected: Set<number>;
   handleSelect: HandleSelect;
-  openSlots: Session[];
+  openSlots: Session[] | null;
   isSelectable: FunctionIsSelectable;
 }
 

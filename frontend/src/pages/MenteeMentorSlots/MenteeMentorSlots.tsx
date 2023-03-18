@@ -60,7 +60,7 @@ const MenteeMentorSlots = () => {
   const navigator = useNavigate();
   // TODO
   const currDate = new Date();
-  const [openSlots, setOpenSlots] = useState<Session[]>([])
+  const [openSlots, setOpenSlots] = useState<Session[] | null>(null)
   const [selected, setSelected] = useState(() => new Set<number>());
   const handleSelect = (rowIndex: number, colIndex: number) =>
     setSelected((prev) => updateSelected(prev, rowIndex + colIndex * 48))
