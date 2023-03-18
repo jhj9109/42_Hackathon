@@ -8,7 +8,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -46,4 +46,4 @@ jwt:
 
 info:
   web:
-    frontUrl: 'http://10.18.201.217:3000'
+    frontUrl: 'http://localhost:8080'

@@ -9,6 +9,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum StatusType {
 
+    CANCELED("STATUS_CANCELED", "취소됨", 4),
     COMPLETED("STATUS_COMPLETED", "처리 완료", 3),
     MATCHED("STATUS_MATCHED", "매칭 완료", 2),
     MATCHING("STATUS_MATCHING", "매칭 중", 1);

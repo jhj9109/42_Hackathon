@@ -19,10 +19,12 @@ public class CookieUtil {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(ACCESS_TOKEN)) {
+                    System.out.println("쿠키 토큰 찾음! : " + ACCESS_TOKEN + " : " + cookie.getValue());
                     return cookie.getValue();
                 }
             }
         }
+        System.out.println("쿠키 토큰 인중 실패!!");
         return null;
     }
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
