@@ -17,10 +17,17 @@ import java.util.Optional;
 public class TokenService {
     private final TokenRepository repository;
     public UserDto findUserByAccessToken(String cookieAccessToken, String headerAccessToken) {
-        User user = findUser(cookieAccessToken)
-                .orElse(findUser(headerAccessToken)
-                        .orElseThrow(() -> new AccessException("{front.url}"))
-                );
+        User user = user = findUser(cookieAccessToken).orElse(null);
+        if (user == null) {
+            user = findUser(headerAccessToken).orElseThrow(() -> new AccessException("{front.url}"));
+        }
+//        User cUser = findUser(cookieAccessToken).orElse(null);
+//        User hUser = findUser(headerAccessToken).orElse(null);
+//        System.out.println("쿠키 조회 유저 : " + cUser + "\n헤더 조회 유저 : " + hUser);
+//        User user = findUser(cookieAccessToken)
+//                .orElse(findUser(headerAccessToken)
+//                        .orElseThrow(() -> new AccessException("{front.url}"))
+//                );
         return UserDto.from(user);
     }
 

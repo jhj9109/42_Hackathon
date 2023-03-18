@@ -28,4 +28,15 @@ public class CreateUserQuestionRequestDto {
     private LocalDateTime endTime;
 
     private TagDto tag;
+
+    @Override
+    public String toString() {
+        return "CreateuseQuestionRequestDto{" + '\'' +
+                "title=" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", Tag='" + tag + '\'' +
+                '}';
+    }
 }

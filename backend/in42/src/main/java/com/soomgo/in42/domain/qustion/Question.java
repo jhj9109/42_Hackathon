@@ -31,6 +31,7 @@ public class Question extends BaseTimeEntity{
     private Integer id;
 
     /* 멘토정보는 세션에 들어있음 */
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "session_id")
     private Session session;
@@ -59,9 +60,12 @@ public class Question extends BaseTimeEntity{
     @Column(name = "start_time")
     private LocalDateTime startTime;
 
+    @Setter
+    @NotNull
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
+    @Setter
     @Column(name = "status")
     private StatusType status;
 
