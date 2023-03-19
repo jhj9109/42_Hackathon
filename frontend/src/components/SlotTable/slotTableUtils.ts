@@ -58,7 +58,7 @@ export const isClamp = ({rowIndex, colIndex, currDate, startTime, endTime}: IsCl
     end.getTime() / (60 * 1000)
   ]
   
-  return (sTime <= tTime && tTime <= eTime);
+  return (sTime <= tTime && tTime < eTime);
 }
     
 
