@@ -63,7 +63,7 @@ export const isClamp = ({rowIndex, colIndex, currDate, startTime, endTime}: IsCl
     
 
 export const isSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
-  openSlots.some(session => isClamp({rowIndex, colIndex, currDate, startTime: session.startTime, endTime:session.endTime}))
+  !!openSlots?.some(session => isClamp({rowIndex, colIndex, currDate, startTime: session.startTime, endTime:session.endTime}))
 
 export const notSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
   !isSlot({rowIndex, colIndex, openSlots, currDate});
@@ -71,13 +71,17 @@ export const notSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableP
 export const isElapsed = (rowIndex: number, colIndex: number, currDate: Date) =>
   colIndex === 0 && rowIndex < (currDate.getHours() * 2 + Math.ceil((Number(currDate.getMinutes()) + ADJUSTMENT_MINUTES) / 30));
 export const setState = (
-  rowIndex: number, colIndex: number, currDate: Date, openSlots: Session[], selected: Set<number>, isSelectable: FunctionIsSelectable): number => {
+  rowIndex: number, colIndex: number, currDate: Date, openSlots: Session[] | null, selected: Set<number>, isSelectable: FunctionIsSelectable): number => {
   const i = rowIndex + colIndex * 48;
   let state = 0;
   if (isElapsed(rowIndex, colIndex, currDate)) {
     state |= TILE_STATE.ELAPSED;
     return state;
   } else {
+    // 로딩중isSelectable
+    if (openSlots === null) {
+      return state;
+    }
     // 일단은 전부 셀렉터블
     if (isSelectable({rowIndex, colIndex, openSlots, currDate})) {
       state |= TILE_STATE.SELECTABLE;
@@ -94,6 +98,11 @@ export const setState = (
   return state;
 };
 
+/**
+ * 타일의 현재 상태에 따라 부여할 class를 string 형태로 반환, 기본 tile && 추가 부여 elapsed | selected | slot
+ * @param state 타일의 현재 상태를 나타내는 값, 비트 연산으로 되어 있음
+ * @returns className => state에 맞춰 알맞은 class명 부여
+ */
 export const setTileClass = (state: number) => {
   let className = 'tile';
   if (state & TILE_STATE.ELAPSED) {
@@ -109,15 +118,60 @@ export const setTileClass = (state: number) => {
   return className;
 }
 
-export const sampleOpenSlots: Session[] = [
-  {
-    sessionId: 1,
-    startTime: "2023/03/18/09:00",
-    endTime: "2023/03/18/12:00",
-    tags: [{tagId: 1, tagName: "libft"}]},
-  {
-    sessionId: 2,
-    startTime: "2023/03/18/15:00",
-    endTime: "2023/03/18/18:00",
-    tags: [{tagId: 2, tagName: "gnl"}]},
-]
+export const setToArr = function<T>(s: Set<T>) {
+  const arr: T[] = [];
+  const iter = s.values();
+  for (let i = 0; i < s.size; i++) {
+    arr.push(iter.next().value);
+  }
+  return arr;
+}
+
+/**
+ * 연속된 슬롯만 허용하기 위해 활용될 뼈대 함수
+ * @param sortedSlot 정렬된 슬롯을 받는것으로 가정
+ * @param slotCompareFn 연속된 슬롯 여부를 판단하는데 활용될 함수
+ * @returns 연속된 슬롯여부를 의미하는 불린값 리턴
+ */
+export const isContinuousSlot = function <T, U extends (el: T, i: number, arr: T[]) => boolean>(sortedSlot: T[], slotCompareFn: U) {
+  return sortedSlot.every(slotCompareFn);
+}
+
+/**
+ * 첫날 정보와 index를 합쳐 표현되어지는 slot의 시작시간을 Date객체로 반환
+ * @param rowIndex AM 0시00분 부터 30분 단위를 나타내는데 활용
+ * @param colIndex 요일을 나타내는데 활용
+ * @param currDate 기준시간 => 첫날의 연/월/일로 활용
+ * @returns Date => index로 표현된 슬롯의 시작 시간을 의미하는 Date 객체 반환
+ */
+export const indexToDate = (rowIndex: number, colIndex: number, currDate: Date) =>
+  new Date(
+    currDate.getFullYear(),
+    currDate.getMonth(),
+    currDate.getDate() + colIndex,
+    Math.floor(rowIndex / 2),
+    (rowIndex % 2) * 30
+  );
+export const iToDate = (i: number, currDate: Date) =>
+  ((index: number[]) => indexToDate(index[0], index[1], currDate))(iToIndex(i))
+
+/**
+ * 슬롯을 나타내는 i를 활용도에 따라 다시 rowIndex와 colIndex로 추출
+ * @param i = rowIndex + colIndex * 48
+ * @returns [rowIndex, colIndex] => rowIndex = i % 48, colIndex = Math.floor(i / 48)
+ */
+export const iToIndex = (i: number) => [i % 48, Math.floor(i / 48)];
+
+/**
+ * 선택되어진 슬롯의 정보를 서버에 보내기 위해 startTime과 endTime을 추출
+ * @param sortedSlot index로 표현되는 슬롯, 연속되어 있어야 유의미한 값 도출
+ * @param currDate 첫날을 연/월/일을 의미, index와 함께 슬롯을 표현하는데 활용
+ * @returns [startTime, endTime] => kstOffSet을 더한뒤 toISOString()로 생성 (e.g. "2023-03-18T23:00:00.000Z")
+ */
+export const sortedSlotToTime = (sortedSlot: number[], currDate: Date) => {
+  const END_TIME = 1; // endTime의 경우 시작시간이 아닌 끝시간이 필요 => += 1
+  const [startI, endI] = [sortedSlot[0], sortedSlot[sortedSlot.length - 1] + END_TIME];
+  const [startTime, endTime] = [startI, endI].map((i) => iToDate(i, currDate))
+                                              .map(date => getKstDate(date).toISOString())
+  return [startTime, endTime];
+}

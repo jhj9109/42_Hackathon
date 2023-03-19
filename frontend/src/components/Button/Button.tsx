@@ -35,12 +35,15 @@ const LargeButton = styled.button`
   color: white;
 `;
 
+const dummyOnClick = () => console.log("버튼이 클릭되었습니다.");
+
 const Button = ({ children, onClick, size, disabled }: Props) => {
+  const fn = onClick ?? dummyOnClick;
   if (size === 'small')
-    return <SmallButton disabled={disabled} onClick={onClick}>{children}</SmallButton>;
+    return <SmallButton disabled={disabled} onClick={() => fn()}>{children}</SmallButton>;
   else if (size === 'middle')
-    return <MiddleButton disabled={disabled} onClick={onClick}>{children}</MiddleButton>;
-  return <LargeButton disabled={disabled} onClick={onClick}>{children}</LargeButton>;
+    return <MiddleButton disabled={disabled} onClick={() => fn()}>{children}</MiddleButton>;
+  return <LargeButton disabled={disabled} onClick={() => fn()}>{children}</LargeButton>;
 };
 
 export default Button;

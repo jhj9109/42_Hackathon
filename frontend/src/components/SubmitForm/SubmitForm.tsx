@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../Button/Button';
 import { useNavigate } from 'react-router-dom';
 import Container from '../Container/Container';
@@ -7,6 +7,7 @@ import Container from '../Container/Container';
 interface Props {
   onSubmit?: () => void;
   type?: 'comment' | 'mentoring';
+  mentor?: "";
 }
 
 const SubmitFormStyle = styled.div``;
@@ -56,9 +57,18 @@ const ButtonContainer = styled.div`
   width: 100%;
 `;
 
-const SubmitForm = ({ onSubmit, type }: Props) => {
+const SubmitForm = ({ onSubmit, type, mentor }: Props) => {
   const navigator = useNavigate();
   const buttonText = type === 'mentoring' ? '멘토링 신청' : '후기 작성 완료';
+
+  const [submitAbled, setSubmitAbled] = useState(false);
+
+  const calSubmitAbled = () => true;
+
+  useEffect(() => {
+    setSubmitAbled(calSubmitAbled());
+  }, [])
+
   return (
     <>
       <FormContainer>
@@ -76,7 +86,7 @@ const SubmitForm = ({ onSubmit, type }: Props) => {
         </InputContent>
       </FormContainer>
       <ButtonContainer>
-        <Button size="large" onClick={() => navigator('/')}>
+        <Button size="large" disabled={!submitAbled} onClick={onSubmit}>
           {buttonText}
         </Button>
       </ButtonContainer>
