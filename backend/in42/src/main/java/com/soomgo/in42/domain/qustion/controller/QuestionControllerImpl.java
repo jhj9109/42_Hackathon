@@ -52,8 +52,8 @@ public class QuestionControllerImpl implements QuestionController{
     public ResponseEntity<ExceptionResponse>  AnswerQuestion(HttpServletRequest request, Integer questionId) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
         QuestionDto questionDto = questionService.findQuestionById(questionId);
-        if (questionDto.getStatus() != StatusType.MATCHING.getKey())
-            return ResponseEntity.badRequest().build();
+//        if (questionDto.getStatus() != StatusType.MATCHING.getKey())
+//            throw new RuntimeException("매칭중인 질문만 등록이 가능합니다!"); ///매칭중???
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startTime;

@@ -4,6 +4,8 @@ import com.soomgo.in42.domain.tag.dto.TagDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Builder
 @Getter
 public class UpdateQuestionTagDto {
@@ -11,5 +13,5 @@ public class UpdateQuestionTagDto {
     private Integer id;
     private String title;
     private String content;
-    private TagDto tag;
+    private List<TagDto> tags;
 }

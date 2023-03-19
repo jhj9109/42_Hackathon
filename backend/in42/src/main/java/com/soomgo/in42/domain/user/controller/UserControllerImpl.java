@@ -70,7 +70,6 @@ public class UserControllerImpl implements UserController {
     @PostMapping(value = "/question")
     public ResponseEntity<ExceptionResponse> createUserQuestion(HttpServletRequest request, CreateUserQuestionRequestDto createQuestionDto) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
-        System.out.println("Controller : " + createQuestionDto);
         UpdateQuestionTagDto updateQuestionTagDto = questionService.createQuestion(user, createQuestionDto, null);
         tagService.updateQuestionTag(updateQuestionTagDto);
         return ResponseEntity.ok().build();

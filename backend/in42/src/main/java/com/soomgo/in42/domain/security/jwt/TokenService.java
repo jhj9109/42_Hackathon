@@ -18,6 +18,8 @@ public class TokenService {
     private final TokenRepository repository;
     public UserDto findUserByAccessToken(String cookieAccessToken, String headerAccessToken) {
         User user = user = findUser(cookieAccessToken).orElse(null);
+        if (user != null)
+            System.out.println("Cookie : " + cookieAccessToken + "으로 찾은 유저 " + user.getIntraId());
         if (user == null) {
             user = findUser(headerAccessToken).orElseThrow(() -> new AccessException("{front.url}"));
         }
@@ -28,6 +30,8 @@ public class TokenService {
 //                .orElse(findUser(headerAccessToken)
 //                        .orElseThrow(() -> new AccessException("{front.url}"))
 //                );
+        if (user != null)
+            System.out.println("Barer : " + headerAccessToken + "으로 찾은 유저 " + user.getIntraId());
         return UserDto.from(user);
     }
 

@@ -27,7 +27,7 @@ public class CreateUserQuestionRequestDto {
     @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
     private LocalDateTime endTime;
 
-    private TagDto tag;
+    private List<TagDto> tags;
 
     @Override
     public String toString() {
@@ -36,7 +36,7 @@ public class CreateUserQuestionRequestDto {
                 ", content='" + content + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", Tag='" + tag + '\'' +
+                ", Tag='" + tags + '\'' +
                 '}';
     }
 }

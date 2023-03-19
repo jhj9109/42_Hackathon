@@ -36,12 +36,12 @@ public class TagService {
         User user = userRepository.findById(userDto.getId()).get();
         Set<Tag> tags = new HashSet<>();
         for (TagDto tagDto : tagDtoList) {
-            Optional<Tag> tagOptional = tagRepository.findByName(tagDto.getName());
+            Optional<Tag> tagOptional = tagRepository.findByName(tagDto.getTagName());
             if (tagOptional.isPresent()) {
                 tags.add(tagOptional.get());
             } else {
                 Tag newTag = new Tag();
-                newTag.setName(tagDto.getName());
+                newTag.setName(tagDto.getTagName());
                 tags.add(tagRepository.save(newTag));
             }
         }
@@ -53,12 +53,12 @@ public class TagService {
     public Set<Tag> updateQuestionTag(UpdateQuestionTagDto updateTagDto) {
         Question question = questionRepository.findById(updateTagDto.getId()).get();
         Set<Tag> tags = new HashSet<>();
-        Optional<Tag> tagOptional = tagRepository.findByName(updateTagDto.getTag().getName());
+        Optional<Tag> tagOptional = tagRepository.findByName(updateTagDto.getTags().get(0).getTagName());
         if (tagOptional.isPresent()) {
             tags.add(tagOptional.get());
         } else {
             Tag newTag = new Tag();
-            newTag.setName(updateTagDto.getTag().getName());
+            newTag.setName(updateTagDto.getTags().get(0).getTagName());
             tags.add(tagRepository.save(newTag));
         }
         question.setTags(tags);
@@ -71,12 +71,12 @@ public class TagService {
         List<TagDto> tagDtos = updateSessionTagDto.getTagDtos();
         Set<Tag> tags = new HashSet<>();
         for (TagDto tagDto : tagDtos) {
-            Optional<Tag> tagOptional = tagRepository.findByName(tagDto.getName());
+            Optional<Tag> tagOptional = tagRepository.findByName(tagDto.getTagName());
             if (tagOptional.isPresent()) {
                 tags.add(tagOptional.get());
             } else {
                 Tag newTag = new Tag();
-                newTag.setName(tagDto.getName());
+                newTag.setName(tagDto.getTagName());
                 tags.add(tagRepository.save(newTag));
             }
         }
