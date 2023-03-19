@@ -11,9 +11,11 @@ interface User {
   roleType: string;
   totalExp: number;
 }
+
 interface Session {
   sessionId: number;
-  mentorUser: User | null;
+  mentoUser: User | null;
+  noSessionQuestionDtos: Question[];
   startTime: string;
   endTime: string;
   tags: Tag[];
@@ -40,7 +42,6 @@ interface Question {
   menteeUser: User;
   session: Session | null;
   questionId: number;
-  menteeUserId: number;
   startTime: string;
   status: string;
   tags: Tag[];
@@ -74,3 +75,44 @@ interface Matched {
   tags : Tag[];
   title : string;
 }
+
+
+// {
+// [{
+// sessionId : Integer
+// mentoUser : User
+// startTime : Date
+// endTime : Date
+// noSessionQuestionDtos : NoSessionQeustionDtos[]
+// tags :
+//   [{
+//   tagId : Integer
+//   tagName : String
+//   }]
+// } , { … }]
+// }
+interface NoSessionQeustionDto {
+  comments: Comment[] | null;
+  content: string;
+  endTime: string;
+  menteeUser: User;
+  questionId: number;
+  startTime: string;
+  status: string;
+  tags: Tag[];
+  title: string;
+}
+
+interface MentoringLogs {
+  sessionId: number;
+  mentoUser: User;
+  startTime: string;
+  endTime: string;
+  noSessionQuestionDtos: NoSessionQeustionDto[]; // Question 인터페이스에서 순환참조 안 되게 세션 제외
+  tags: Tag[];
+}
+// 1. 세션이다. 나 => 나의 세션 => 내가 누군가를 도와줬던 세션
+// 2. 세션에는 여러 질문 (매칭된)이 존재할수 있어서 Dto[]로 생겼다.
+// 3. DTO: 하나는 매칭된 하나 => comments는 1개.
+// noSessionQuestionDtos
+

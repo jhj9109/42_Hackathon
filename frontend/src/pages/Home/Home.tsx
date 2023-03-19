@@ -181,11 +181,11 @@ const Home = () => {
             matched.map((m, idx) => (
               // TODO: 임시 땜빵
               // <Row key={m.questionId}>
-              <Row key={m.questionId + idx}>
+              <Row key={m.questionId}>
                 {
                   m.menteeUser.userId === userDetail?.userId
-                  ? <P>{m.menteeUser.intraId}님의 {m.tags[0]?.tagName} 멘토링 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
-                  : <P>{m.session?.mentorUser?.intraId}님의 {m.tags[0]?.tagName} 멘토링 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
+                  ? <P>{m.session?.mentoUser?.intraId}님에게 {m.tags[0]?.tagName} 한수 배우기 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
+                  : <P>{m.menteeUser.intraId}'s {m.tags[0]?.tagName} 멘토링 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
                 }
                 <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
                 <Emoji onClick={() => onOpenMentoring(m.questionId)}>❌</Emoji>
