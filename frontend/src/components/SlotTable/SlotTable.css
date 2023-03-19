@@ -1,5 +1,6 @@
 :root {
     --main-theme-color: #02c4c7;
+    --viva-mageta-2023-pantone-18-1750-color: #bb2649;
 }
 
 .tableContainer {
@@ -49,4 +50,8 @@
 
 .tile.selected {
     background-color: blue;
+}
+
+.tile.matched {
+    background-color: var(--viva-mageta-2023-pantone-18-1750-color);
 }
