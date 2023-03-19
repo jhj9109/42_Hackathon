@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { postRequest } from '../../api/axios';
-import { USER_SESSION_POST_PATH } from '../../api/uri';
+import { getRequest, postRequest } from '../../api/axios';
+import { USER_SESSION_PATH, USER_SESSION_POST_PATH, USER_TAG_PATH } from '../../api/uri';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
-import { isContinuousSlot, notSlot, sampleOpenSlots, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
+import { isContinuousSlot, notSlot, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
+import { sampleOpenSlots } from '../../sampleDatas/slotData';
 import { sampleUserTags } from '../../sampleDatas/userData';
 
 const ButtonContainer = styled.div`
@@ -68,7 +69,7 @@ interface Data {
 }
 
 const convertExpandedTag = (tags: Tag[]): ExpandedTag[] =>
-  tags.map(tag => ({tag, selected: false}));
+  tags.map(tag => ({tag, selected: true}));
 
 const isSubmitAvaiable = (tags: ExpandedTag[] | null, selected: Set<number>) =>
   tags?.some((t) => t.selected) && selected.size !== 0
@@ -142,29 +143,46 @@ const MenteeMentorSlots = () => {
       return;
     }
     const data = setData(sortedSlot, currDate, filteredTags);
+    // TODO: 아래를 axios 요청으로 교체하기
     console.log("===============요청 보낼 데이터===============");
     console.log(data);
-    alert("멘토링 슬롯 등록에 성공하였습니다.(테스트용 멘트입니다)");
-    navigator("/");
-    // TODO: axios 요청만들기
-    // try {
-      // const response = await postRequest(USER_SESSION_POST_PATH, data);
-    //   // 성공이라면
-    //   console.log(response);
-    //   alert("멘토링 슬롯 등록에 성공하였습니다.");
-    //   navigator("/");
-    // } catch (error) {
-    //   console.error(error);
-    //   alert("멘토링 슬롯 등록에 실패하였습니다.");
-    // }
+    // alert("멘토링 슬롯 등록에 성공하였습니다.(테스트용 멘트입니다)");
+    // navigator("/");
     console.log("==========================================");
-
+    
+    // TODO: axios 요청만들기
+    
+    postRequest(USER_SESSION_PATH, data)
+      .then(res => {
+        console.log(res.data);
+        alert("멘토링 슬롯 등록에 성공하였습니다.");
+        navigator("/");
+      })
+      .catch(err => {
+        console.log(err)
+        alert("멘토링 슬롯 등록에 실패하였습니다.");
+      })
   }
 
+  // useEffect(() => {
+  //   // TODO: axios 요청 
+  //   setTimeout(() => setOpenSlots(sampleOpenSlots), 500); // USER_SESSION_PATH & GET
+  //   setTimeout(() => setTags(convertExpandedTag(sampleUserTags)), 500); // USER_TAG_PATH & GET
+  // }, [])
+
   useEffect(() => {
-    // TODO: axios 요청 
-    setTimeout(() => setOpenSlots(sampleOpenSlots), 500);
-    setTimeout(() => setTags(convertExpandedTag(sampleUserTags)), 500);
+    getRequest(USER_SESSION_PATH)
+      .then(res => setOpenSlots(res.data as Session[]))
+      .catch(err => console.error(err))
+  }, [])
+
+  useEffect(() => {
+    getRequest(USER_TAG_PATH)
+      .then(res => {
+        // console.log(res.data.tags);
+        setTags(convertExpandedTag(res.data.tags as Tag[]))
+      })
+      .catch(err => console.error(err))
   }, [])
 
   useEffect(() => {

@@ -5,7 +5,8 @@ import { MENTEE_SLOTS_NEXT_STEP_URL, USER_SESSION_POST_PATH } from '../../api/ur
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
-import { isContinuousSlot, isSlot, notSlot, sampleOpenSlots, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
+import { isContinuousSlot, isSlot, notSlot, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
+import { sampleOpenSlots } from '../../sampleDatas/slotData';
 
 const ButtonContainer = styled.div`
   width: 100%;

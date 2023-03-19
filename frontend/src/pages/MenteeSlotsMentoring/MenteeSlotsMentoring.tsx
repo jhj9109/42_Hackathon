@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MENTEE_SLOTS_FIRST_STEP_URL } from '../../api/uri';
+import { postRequest } from '../../api/axios';
+import { MENTEE_SLOTS_FIRST_STEP_URL, USER_QUESTION_PATH } from '../../api/uri';
 import SubmitForm from '../../components/SubmitForm/SubmitForm';
 import './MenteeSlotsMentoring.css';
 
@@ -15,14 +16,14 @@ interface Data {
   content : string;
   startTime : string;
   endTime : string;
-  tag : Tag[];
+  tags : Tag[];
 }
 const setData = (startTime: string, endTime: string): Data => ({
   title: "타이틀",
   content: "내용",
   startTime,
   endTime,
-  tag: [{tagId: 0, tagName: "Libft"}],
+  tags: [{tagId: 3, tagName: "minishell"}],
 })
 
 const MenteeSlotsMentoring = () => {
@@ -36,6 +37,17 @@ const MenteeSlotsMentoring = () => {
   const onSubmit = () => {
     const data = setData(startTime as string, endTime as string);
     console.log(data)
+
+    postRequest(USER_QUESTION_PATH, data)
+      .then(res => {
+        console.log(res.data);
+        alert("질문 등록에 성공하였습니다.");
+        navigator("/");
+      })
+      .catch(err => {
+        console.log(err)
+        alert("질문 등록에 실패하였습니다.");
+      })
   }
   
   useEffect(() => {
