@@ -31,6 +31,12 @@ public class UserService {
         User user = userRepository.findById(userId).orElse(null);
         return UserDto.from(user);
     }
+
+    @Transactional(readOnly = true)
+    public UserDto findUserByIntraId(String intraId) {
+        User user = userRepository.findByIntraId(intraId).orElseThrow(() -> new RuntimeException("회원가입된 유저가 아닙니다!"));
+        return UserDto.from(user);
+    }
     @Transactional(readOnly = true)
     public TagListDto findUserTags(UserDto userDto) {
         User user = userRepository.findById(userDto.getUserId())

@@ -48,7 +48,7 @@ info:
   web:
 #    frontUrl: 'https://273f-121-135-181-61.jp.ngrok.io'
 #    frontUrl: 'http://10.18.238.114:3000'
-    frontUrl: 'http://localhost:3000'
+    frontUrl: 'http://localhost:3000/login'
 
 server:
   port: 8080
