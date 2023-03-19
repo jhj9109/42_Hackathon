@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getRequest, postRequest } from '../../api/axios';
-import { USER_SESSION_PATH, USER_SESSION_POST_PATH, USER_TAG_PATH } from '../../api/uri';
+import { USER_SESSION_PATH, USER_TAG_PATH } from '../../api/uri';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
