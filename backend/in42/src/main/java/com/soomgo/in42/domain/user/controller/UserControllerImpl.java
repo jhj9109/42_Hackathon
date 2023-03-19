@@ -77,7 +77,6 @@ public class UserControllerImpl implements UserController {
     @PostMapping(value = "/question/{sessionId}")
     public ResponseEntity<ExceptionResponse> createUserQuestionToSession(HttpServletRequest request, CreateUserQuestionRequestDto createQuestionDto, Integer sessionId) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
-        System.out.println("Controller : " + createQuestionDto);
         questionService.createQuestion(user, createQuestionDto, sessionId);
         return ResponseEntity.ok().build();
     }
@@ -86,6 +85,12 @@ public class UserControllerImpl implements UserController {
     public List<SessionDto> findUserSession(HttpServletRequest request) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
         return sessionService.findUserOpenSessions(user);
+    }
+
+    @GetMapping(value = "/session/log")
+    public List<SessionDto> findUserSessionLog(HttpServletRequest request) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return sessionService.findUserSessionLog(user);
     }
 
     @PostMapping(value = "/session")

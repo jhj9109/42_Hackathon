@@ -17,7 +17,7 @@ import java.util.Optional;
 public class TokenService {
     private final TokenRepository repository;
     public UserDto findUserByAccessToken(String cookieAccessToken, String headerAccessToken) {
-        User user = user = findUser(cookieAccessToken).orElse(null);
+        User user = findUser(cookieAccessToken).orElse(null);
         if (user != null)
             System.out.println("Cookie : " + cookieAccessToken + "으로 찾은 유저 " + user.getIntraId());
         if (user == null) {

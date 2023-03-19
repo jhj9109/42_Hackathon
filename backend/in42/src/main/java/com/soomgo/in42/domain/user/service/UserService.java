@@ -33,8 +33,8 @@ public class UserService {
     }
     @Transactional(readOnly = true)
     public TagListDto findUserTags(UserDto userDto) {
-        User user = userRepository.findById(userDto.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id " + userDto.getId()));
+        User user = userRepository.findById(userDto.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id " + userDto.getUserId()));
 
         Set<Tag> tagSet = user.getTags();
         List<Tag> tagList = new ArrayList<>(tagSet);
