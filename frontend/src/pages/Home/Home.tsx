@@ -6,6 +6,7 @@ import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import Modal from '../../components/Modal/Modal';
 import { ALL_QUESTION_PATH, USER_MATCHED_PATH, USER_QUESTION_PATH } from '../../api/uri';
+import { getIntervalDateString } from '../../utils/dateUtils';
 
 const HomeStyle = styled.div`
   width: 100%;
@@ -61,23 +62,6 @@ const QuestionBlock = styled.button`
 
 const MATCHING_STATUS = "매칭 중";
 
-// const getShortDate = (dateString: string) => new Date(dateString)
-const getIntervalDateString = (targetDate: Date, currDate: Date) => {
-  const intervals = {
-    days: Math.floor((targetDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((targetDate.getTime() - currDate.getTime()) / (1000 * 60 * 60)),
-    minutes: Math.floor((targetDate.getTime() - currDate.getTime()) / (1000 * 60)),
-  }
-  if (intervals.days !== 0) {
-    return `${intervals.days}일 후`
-  } else if (intervals.hours !== 0 ) {
-    return `${intervals.hours}시간 후`
-  } else if (intervals.minutes) {
-    return `${intervals.minutes}분 후`
-  } else {
-    return `now`;
-  }
-}
 
 // TODO: 데이터 형식에 따라 적절한 수정 필요
 const notMine = (myUserId: number) => (question: Question) => question.menteeUser.userId !== myUserId;
@@ -179,13 +163,11 @@ const Home = () => {
         <HomeContainer>
           {
             matched.map((m, idx) => (
-              // TODO: 임시 땜빵
-              // <Row key={m.questionId}>
               <Row key={m.questionId}>
                 {
                   m.menteeUser.userId === userDetail?.userId
                   ? <P>{m.session?.mentoUser?.intraId}님에게 {m.tags[0]?.tagName} 한수 배우기 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
-                  : <P>{m.menteeUser.intraId}'s {m.tags[0]?.tagName} 멘토링 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
+                  : <P>{m.menteeUser.intraId}님의 {m.tags[0]?.tagName ?? "과제"} 멘토링 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
                 }
                 <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
                 <Emoji onClick={() => onOpenMentoring(m.questionId)}>❌</Emoji>
