@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         element: <MenteeMentors />,
       },
       {
-        path: 'mentee/comment',
+        path: 'mentee/comment/:questionId',
         element: <MenteeComment />,
       },
       {

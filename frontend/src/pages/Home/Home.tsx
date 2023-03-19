@@ -169,7 +169,7 @@ const Home = () => {
                   ? <P>{m.session?.mentoUser?.intraId}님에게 {m.tags[0]?.tagName} 한수 배우기 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
                   : <P>{m.menteeUser.intraId}님의 {m.tags[0]?.tagName ?? "과제"} 멘토링 {getIntervalDateString(new Date(m.startTime), currDate)}</P>
                 }
-                <Emoji onClick={() => navigator('/mentee/comment')}>⭕️</Emoji>
+                <Emoji onClick={() => navigator(`/mentee/comment/${m.questionId}`)}>⭕️</Emoji>
                 <Emoji onClick={() => onOpenMentoring(m.questionId)}>❌</Emoji>
               </Row>
             ))
