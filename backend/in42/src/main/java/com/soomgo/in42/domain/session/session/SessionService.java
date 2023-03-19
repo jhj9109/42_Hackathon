@@ -2,7 +2,7 @@ package com.soomgo.in42.domain.session.session;
 
 import com.soomgo.in42.domain.qustion.Question;
 import com.soomgo.in42.domain.qustion.dto.NoSessionQuestionDto;
-import com.soomgo.in42.domain.session.dto.FindOpenSessionResponseDto;
+import com.soomgo.in42.domain.qustion.dto.QuestionDto;
 import com.soomgo.in42.domain.session.Session;
 import com.soomgo.in42.domain.session.dto.SessionDto;
 import com.soomgo.in42.domain.session.repository.SessionRepository;
@@ -47,7 +47,7 @@ public class SessionService {
         for (SessionDto sessionDto : sessionDtos)
         {
             List<NoSessionQuestionDto> filteredQeustions =  sessionDto.getNoSessionQuestionDtos().stream()
-                    .filter(q -> q.getStatus() != StatusType.CANCELED.getDisplayName() || q.getStatus() != StatusType.COMPLETED.getDisplayName())
+                    .filter(q -> q.getStatus() != StatusType.CANCELED.getDisplayName() && q.getStatus() != StatusType.COMPLETED.getDisplayName())
                     .collect(Collectors.toList());
             sessionDto.setNoSessionQuestionDtos(filteredQeustions);
         }
@@ -57,11 +57,26 @@ public class SessionService {
     @Transactional(readOnly = true)
     public List<SessionDto> findUserSessionLog(UserDto userDto) {
         User user = userRepository.findById(userDto.getUserId()).orElseThrow(() -> new RuntimeException("유저를 찾을수 없습니다!"));
-        List<Session> sessions = user.getSessions();
+        List<Session> sessions = user.getSessions().stream()
+                .filter(s -> !s.getQuestions().isEmpty())
+                .collect(Collectors.toList());
         sessions.sort(Comparator.comparing(Session::getStartTime));
         List<SessionDto> sessionDtos = SessionDto.from(sessions);
-        return sessionDtos;
+
+        //세션 안에 COMPLETED된 질문들만 넣어서 보내기
+        List<SessionDto> filteredSessions = sessionDtos.stream()
+                .map(session -> {
+                    List<NoSessionQuestionDto> questions = session.getNoSessionQuestionDtos().stream()
+                            .filter(question -> question.getStatus() != StatusType.COMPLETED.getDisplayName())
+                            .collect(Collectors.toList());
+                    session.setNoSessionQuestionDtos(questions);
+                    return session;
+                })
+                .filter(session -> !session.getNoSessionQuestionDtos().isEmpty())
+                .collect(Collectors.toList());
+        return filteredSessions;
     }
+
     @Transactional
     public List<SessionDto> findUserOpenSessions(UserDto userDto) {
         User user = userRepository.findById(userDto.getUserId()).get();
