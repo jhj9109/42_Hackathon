@@ -17,6 +17,7 @@ import com.soomgo.in42.domain.user.dto.UserDto;
 import com.soomgo.in42.domain.user.service.UserService;
 import com.soomgo.in42.global.exception.entity.ExceptionResponse;
 import com.soomgo.in42.global.util.CookieUtil;
+import com.soomgo.in42.global.util.FortyTwoApiHandler;
 import com.soomgo.in42.global.util.HeaderUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,11 +36,18 @@ public class UserControllerImpl implements UserController {
     private final SessionService sessionService;
     private final TagService tagService;
     private final TokenService tokenService;
+    private final FortyTwoApiHandler fortyTwoApiHandler;
+
+    @PostMapping(value = "/login")
+    public String userLogin(HttpServletRequest request, String intraId) {
+        UserDto user = userService.findUserByIntraId(intraId);
+        return user.getIntraId();
+    }
 
     @GetMapping(value = "/test")
     public String firstApiTest(HttpServletRequest request) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
-        return "Done!";
+        return FortyTwoApiHandler.getSeoulLocations();
     }
 
     @GetMapping(value = "/detail")
@@ -77,7 +85,6 @@ public class UserControllerImpl implements UserController {
     @PostMapping(value = "/question/{sessionId}")
     public ResponseEntity<ExceptionResponse> createUserQuestionToSession(HttpServletRequest request, CreateUserQuestionRequestDto createQuestionDto, Integer sessionId) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
-        System.out.println("Controller : " + createQuestionDto);
         questionService.createQuestion(user, createQuestionDto, sessionId);
         return ResponseEntity.ok().build();
     }
@@ -86,6 +93,12 @@ public class UserControllerImpl implements UserController {
     public List<SessionDto> findUserSession(HttpServletRequest request) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
         return sessionService.findUserOpenSessions(user);
+    }
+
+    @GetMapping(value = "/session/log")
+    public List<SessionDto> findUserSessionLog(HttpServletRequest request) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return sessionService.findUserSessionLog(user);
     }
 
     @PostMapping(value = "/session")

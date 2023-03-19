@@ -33,7 +33,7 @@ public class TagService {
 
     @Transactional
     public Set<Tag> updateUserTag(UserDto userDto, List<TagDto> tagDtoList) {
-        User user = userRepository.findById(userDto.getId()).get();
+        User user = userRepository.findById(userDto.getUserId()).get();
         Set<Tag> tags = new HashSet<>();
         for (TagDto tagDto : tagDtoList) {
             Optional<Tag> tagOptional = tagRepository.findByName(tagDto.getTagName());

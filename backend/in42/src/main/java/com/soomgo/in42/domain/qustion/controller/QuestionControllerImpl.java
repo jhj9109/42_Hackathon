@@ -38,7 +38,12 @@ public class QuestionControllerImpl implements QuestionController{
     @GetMapping(value = "")
     public List<QuestionDto> findOpenQuestion(HttpServletRequest request) {
         UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
-        return questionService.findQuestionsByStatus(StatusType.MATCHING);
+        return questionService.findQuestionsByStatus(user, StatusType.MATCHING);
+    }
+    @GetMapping("{questionId}")
+    public QuestionDto findQuestionDetial(HttpServletRequest request, Integer questionId) {
+        UserDto user = tokenService.findUserByAccessToken(CookieUtil.getAccessToken(request), HeaderUtil.getAccessToken(request));
+        return questionService.findQuestionById(questionId);
     }
 
     @PutMapping(value = "/{questionId}/cancel")
