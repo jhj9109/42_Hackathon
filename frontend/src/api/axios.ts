@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const NGROK_URL = "https://69b9-121-135-181-61.jp.ngrok.io";
-const JAEJYUKI_URL = "http://10.18.201.217:8080/"
+const JAEJYUKI_URL = "https://10.18.201.217:8080/"
 const testHeaders = {
   'Content-Type': 'application/json',
   Authorization: `Bearer ${"hyeonjan"}`,
@@ -18,8 +18,9 @@ const testHeaders = {
 // });
 
 const axiosClient = axios.create({
-  baseURL: 'http://10.19.237.190:8080',
+  baseURL: JAEJYUKI_URL,
   withCredentials: true,
+  headers: testHeaders,
 });
 
 export async function getRequest(URL: string) {

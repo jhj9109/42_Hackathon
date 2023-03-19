@@ -1,26 +1,9 @@
-interface Tag {
-  tagId: number;
-  tagName: string;
-}
+
 interface ExpandedTag {
   tag: Tag;
   selected: boolean;
 }
-interface User {
-  userId: number;
-  intraId: string;
-  email: string;
-  imageUri: string;
-  roleType: string;
-  totalExp: number;
-}
-interface Session {
-  sessionId: number;
-  mentorUser: User | null;
-  startTime: string;
-  endTime: string;
-  tags: Tag[];
-}
+
 interface IsSelectableParams {
   rowIndex: number;
   colIndex: number;
