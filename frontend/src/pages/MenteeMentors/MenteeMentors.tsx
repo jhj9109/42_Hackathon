@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { getRequest } from '../../api/axios';
+import { ALL_SESSION_PATH } from '../../api/uri';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 
@@ -46,20 +48,46 @@ const Tag = styled.p`
 const ButtonContainer = styled.div`
   width: 100%;
 `;
+
+const isOthersSession = (userId: number) => (session: Session) =>
+  !(session.mentoUser?.userId === userId)
+
+const getUrlToMentoSlot = (userId: number) =>
+  userId === undefined
+  ? `/mentee/mentors/0/slots`
+  : `/mentee/mentors/${userId}/slots`;
+
 const MenteeMentors = () => {
   const navigator = useNavigate();
+  const [mentorList, setMentorList] = useState<Session[]>(() => [])
+  // TODO: myUserId 바꾸기
+  const myUserId = 1;
+  useEffect(() => {
+    getRequest(ALL_SESSION_PATH)
+      .then(res => {
+        const sessions: Session[] = res.data;
+        // TODO: 임시용 교체하기 && myUserId 바꾸기
+        // const othersSessions = sessions;
+        const othersSessions = sessions.filter(isOthersSession(myUserId));
+        console.log("othersSessions: ", othersSessions);
+        setMentorList(othersSessions)
+      })
+  }, [])
+
   return (
     <>
       <MenteeMentorsStyle>
         <Title>멘토 리스트</Title>
-        <Element onClick={() => navigator('/mentee/mentors/1/slots')}>
-          <Nickname>hyeonjan</Nickname>
-          <Tag>libft, minishell</Tag>
-        </Element>
-        <Element onClick={() => navigator('/mentee/mentors/1/slots')}>
-          <Nickname>hyeonjan</Nickname>
-          <Tag>libft, minishell</Tag>
-        </Element>
+        {
+          mentorList.map(mentor => (
+            // TODO: myUserId 바꾸기
+            <Element key={mentor.sessionId} onClick={() => navigator(getUrlToMentoSlot(myUserId))}>
+              <Nickname>{mentor?.mentoUser?.intraId ?? "유저"}</Nickname>
+              <Tag>{mentor.tags.map(tag => tag.tagName).reduce((prev, el) => prev + ", " + el)}</Tag>
+            </Element>
+          ))
+        }
+        
       </MenteeMentorsStyle>
       <ButtonContainer>
         <Button size="large" onClick={() => navigator('/mentee/slots')}>
