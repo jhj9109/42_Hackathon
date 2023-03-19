@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getRequest, postRequest } from '../../api/axios';
-import { USER_SESSION_PATH, USER_SESSION_POST_PATH, USER_TAG_PATH } from '../../api/uri';
+import { USER_SESSION_PATH, USER_TAG_PATH } from '../../api/uri';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
 import { isContinuousSlot, notSlot, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
-import { sampleOpenSlots } from '../../sampleDatas/slotData';
-import { sampleUserTags } from '../../sampleDatas/userData';
 
 const ButtonContainer = styled.div`
   width: 100%;
@@ -164,22 +162,19 @@ const MenteeMentorSlots = () => {
       })
   }
 
-  // useEffect(() => {
-  //   // TODO: axios 요청 
-  //   setTimeout(() => setOpenSlots(sampleOpenSlots), 500); // USER_SESSION_PATH & GET
-  //   setTimeout(() => setTags(convertExpandedTag(sampleUserTags)), 500); // USER_TAG_PATH & GET
-  // }, [])
-
   useEffect(() => {
     getRequest(USER_SESSION_PATH)
-      .then(res => setOpenSlots(res.data as Session[]))
+      .then(res => {
+        console.log("유저 자신의 기존 세션: ",res.data);
+        setOpenSlots(res.data as Session[])
+      })
       .catch(err => console.error(err))
   }, [])
 
   useEffect(() => {
     getRequest(USER_TAG_PATH)
       .then(res => {
-        // console.log(res.data.tags);
+        console.log("유저 자신의 태그 정보: ", res.data.tags);
         setTags(convertExpandedTag(res.data.tags as Tag[]))
       })
       .catch(err => console.error(err))
