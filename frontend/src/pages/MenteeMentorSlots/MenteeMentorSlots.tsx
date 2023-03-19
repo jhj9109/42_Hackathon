@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
-import { isSlot, sampleOpenSlots, updateSelected } from '../../components/SlotTable/slotTableUtils';
+import { isSlot, updateSelected } from '../../components/SlotTable/slotTableUtils';
+import { sampleOpenSlots } from '../../sampleDatas/slotData';
 
 const ButtonContainer = styled.div`
   width: 100%;
@@ -60,7 +61,7 @@ const MenteeMentorSlots = () => {
   const navigator = useNavigate();
   // TODO
   const currDate = new Date();
-  const [openSlots, setOpenSlots] = useState<Session[]>([])
+  const [openSlots, setOpenSlots] = useState<Session[] | null>(null)
   const [selected, setSelected] = useState(() => new Set<number>());
   const handleSelect = (rowIndex: number, colIndex: number) =>
     setSelected((prev) => updateSelected(prev, rowIndex + colIndex * 48))

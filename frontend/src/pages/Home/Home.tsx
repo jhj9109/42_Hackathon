@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getRequest } from '../../api/axios';
+import { getRequest, putRequest } from '../../api/axios';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import Modal from '../../components/Modal/Modal';
@@ -80,6 +80,29 @@ const Home = () => {
   //   })();
   // }, []);
 
+  // TODO: axios 요청으로 보여줄 데이터 가져오기
+  useEffect(() => {
+    getRequest("question")
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.error(err);
+      })
+  })
+
+  // TODO: 매칭 성사 로직 구현 필
+  // const onClick = () => {
+  //   const url = `question/${4}/answer`;
+  //   putRequest(url)
+  //     .then(res => {
+  //       console.log(res)
+  //     })
+  //     .catch(err => {
+  //       console.error(err);
+  //     })
+  // }
+  
   return (
     <>
       <HomeStyle>
