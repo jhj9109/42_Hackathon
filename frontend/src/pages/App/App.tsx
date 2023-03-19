@@ -37,6 +37,8 @@ const UserInfoButton = styled.button`
   color: white;
 `;
 
+const GITHUB_URL = "https://github.com/jhj9109/42_Hackathon";
+
 function App() {
   const navigator = useNavigate();
   const location = useLocation();
@@ -68,7 +70,7 @@ function App() {
 
   
   const onGithub = () => {
-    window.open('https://github.com/kangmin5505/42In');
+    window.open(GITHUB_URL);
   };
 
   return (

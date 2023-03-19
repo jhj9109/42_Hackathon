@@ -4,7 +4,13 @@ import { ACCESS_TOKEN_STR } from '../utils/cookieUtils';
 export const getToken = () => localStorage.getItem(ACCESS_TOKEN_STR) ?? ""
 
 const NGROK_URL = "https://69b9-121-135-181-61.jp.ngrok.io";
-export const JAEHYUKI_URL = "https://10.18.201.217:8080"
+export const NEED_SECURE = false; // secure가 필요하고 안필요하고
+
+export const JAEHYUKI_URL = 
+  NEED_SECURE
+  ? "https://10.18.201.217:8080"
+  : "http://10.18.201.217:8080"
+
 const testHeaders = {
   'Content-Type': 'application/json',
   Authorization: `Bearer ${getToken()}`,
