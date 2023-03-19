@@ -15,6 +15,7 @@ import com.soomgo.in42.global.type.RoleType;
 import com.soomgo.in42.global.util.ApplicationYmlRead;
 import com.soomgo.in42.global.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -96,8 +97,22 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
         CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
-//        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge + 60 * 60 * 24);
         CookieUtil.addCookie(response, ACCESS_TOKEN, userInfo.getIntraId(), cookieMaxAge + 60 * 60 * 24);
+        ResponseCookie cookie = ResponseCookie.from(ACCESS_TOKEN, userInfo.getIntraId())
+//                .domain("localhost")
+                .domain("10.18.238.114")
+//                .domain("10.18.201.217")
+//                .domain("273f-121-135-181-61.jp.ngrok.io")
+                .sameSite("None")
+                .httpOnly(false)
+                .secure(true)
+                .path("/")
+                .maxAge(cookieMaxAge + 60 * 60 * 24)
+                .build();
+//        response.setHeader("Set-Cookie", ACCESS_TOKEN+"="+userInfo.getIntraId()+"   Secure; SameSite=None; MaxAge=1000000;");
+//        System.out.println(cookie.toString());
+        response.setHeader("Set-Cookie", cookie.toString());
+        response.addHeader("Authorization", "Bearer " + userInfo.getIntraId());
 
         String finalUrl = UriComponentsBuilder.fromUriString(applicationYmlRead.getFrontUrl())
 //                .queryParam("token", userRefreshToken == null ? accessToken.getToken() : userRefreshToken.getAccessToken())
@@ -152,7 +167,7 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
             userRefreshToken.setRefreshToken(refreshToken.getToken());
             userRefreshTokenRepository.save(userRefreshToken);
         } else {
-            userRefreshToken = new Token(saveUser, refreshToken.getToken(), accessToken.getToken());
+            userRefreshToken = new Token(saveUser, userInfo.getIntraId(), userInfo.getIntraId());
             userRefreshTokenRepository.saveAndFlush(userRefreshToken);
         }
 
@@ -160,7 +175,7 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
         int cookieMaxAge = (int) refreshTokenExpiry / 60;
 
         CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
-        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), cookieMaxAge);
+        CookieUtil.addCookie(response, ACCESS_TOKEN, userInfo.getIntraId(), cookieMaxAge + 60 * 60 * 24);
 
         return UriComponentsBuilder.fromUriString(applicationYmlRead.getFrontUrl())
                 .queryParam("token", userRefreshToken == null ? accessToken.getToken() : userRefreshToken.getAccessToken())

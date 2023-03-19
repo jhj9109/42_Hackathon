@@ -16,7 +16,7 @@ import java.util.*;
 @Builder
 public class TagDto {
     private Integer tagId;
-    private String name;
+    private String tagName;
 
     public static TagDto from(Tag tag) {
         TagDto tagDto;
@@ -25,7 +25,7 @@ public class TagDto {
         } else {
             tagDto = TagDto.builder()
                     .tagId(tag.getId())
-                    .name(tag.getName())
+                    .tagName(tag.getName())
                     .build();
         }
         return tagDto;
@@ -36,7 +36,7 @@ public class TagDto {
         for (Tag tag : tags) {
             TagDto tagDto = TagDto.builder()
                     .tagId(tag.getId())
-                    .name(tag.getName()).build();
+                    .tagName(tag.getName()).build();
             tagDtos.add(tagDto);
         }
         return tagDtos;
@@ -45,7 +45,7 @@ public class TagDto {
     public static Set<Tag> convertTagDtoListToTagSet(List<TagDto> tagDtoList) {
         Set<Tag> tagSet = new HashSet<>();
         for (TagDto tagDto : tagDtoList) {
-            tagSet.add(new Tag(tagDto.getName()));
+            tagSet.add(new Tag(tagDto.getTagName()));
         }
         return tagSet;
     }

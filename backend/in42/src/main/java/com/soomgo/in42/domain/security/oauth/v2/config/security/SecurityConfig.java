@@ -23,11 +23,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+
+import static org.springframework.web.servlet.function.RequestPredicates.headers;
 
 @Configuration
 @RequiredArgsConstructor
@@ -51,6 +54,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .headers()
+                .httpStrictTransportSecurity()
+                .includeSubDomains(true)
+                .maxAgeInSeconds(31536000)
+                .and()
+                .contentTypeOptions()
+                .and()
+                .xssProtection()
+                .and()
+                .cacheControl()
+                .and()
+                .frameOptions()
+                .sameOrigin()
+                .and()
                 .cors()
                 .and()
                     .sessionManagement()

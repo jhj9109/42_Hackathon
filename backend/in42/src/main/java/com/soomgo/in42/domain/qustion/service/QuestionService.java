@@ -6,6 +6,7 @@ import com.soomgo.in42.domain.qustion.dto.UpdateQuestionTagDto;
 import com.soomgo.in42.domain.qustion.repository.QuestionRepository;
 import com.soomgo.in42.domain.session.Session;
 import com.soomgo.in42.domain.session.repository.SessionRepository;
+import com.soomgo.in42.domain.tag.dto.TagDto;
 import com.soomgo.in42.domain.user.User;
 import com.soomgo.in42.domain.user.dto.CreateUserQuestionRequestDto;
 import com.soomgo.in42.domain.user.dto.UserDto;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -48,11 +50,13 @@ public class QuestionService {
             question.setEndTime(LocalDateTime.of(9999, 12, 31, 23, 59, 59));
             // 기존에 존재하던 question 존재하면 닫아야함
         }
+        List<TagDto> tagDtos = new ArrayList<TagDto>();
+        tagDtos.add(createQuestionDto.getTags().get(0));
         Question savedQuestion = questionRepository.save(question);
         return UpdateQuestionTagDto.builder()
                 .id(savedQuestion.getId())
                 .title(savedQuestion.getTitle())
-                .tag(createQuestionDto.getTag())
+                .tags(tagDtos)
                 .build();
     }
 
@@ -73,7 +77,7 @@ public class QuestionService {
         User user = userRepository.findById(userDto.getId()).get();
         List<Question> questions = user.getQuestions().stream()
                 .filter(question -> question.getEndTime().isAfter(LocalDateTime.now())
-                        && (question.getStatus() != StatusType.COMPLETED || question.getStatus() != StatusType.CANCELED))
+                        && (question.getStatus() == StatusType.MATCHING || question.getStatus() != StatusType.MATCHED))
                 .collect(Collectors.toList());
 
         return QuestionDto.from(questions);
