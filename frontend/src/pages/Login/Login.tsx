@@ -67,7 +67,7 @@ const Login = () => {
       gap="1vh"
     >
       <Div>
-        <img src={logo} />
+        <img style={{width: "inherit"}}src={logo} />
       </Div>
       <Div2>
         <label htmlFor='intraId'></label>
