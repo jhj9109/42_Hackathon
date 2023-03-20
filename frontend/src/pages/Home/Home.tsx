@@ -70,6 +70,11 @@ const isMatching = (matched: Matched) => matched || true; // question.status ===
 const fetchMatched = async (setMatched: React.Dispatch<React.SetStateAction<Matched[]>>) => {
   try {
     const response = await getRequest(USER_MATCHED_PATH);
+    // TODO: 토큰 세팅이 뭔가 바로 안되서 리프레쉬 시도
+    if (!response.data) {
+      window.location.reload();
+      return;
+    }
     const matched: Matched[] = response.data;
     console.log("matched: ", matched);
     setMatched(matched);
@@ -81,6 +86,9 @@ const fetchMatched = async (setMatched: React.Dispatch<React.SetStateAction<Matc
 const fetchQuestion = async (intraId: number, setQuestion: React.Dispatch<React.SetStateAction<Question[]>>) => {
   try {
     const response = await getRequest(ALL_QUESTION_PATH);
+    if (!response.data) {
+      return;
+    }
     const allQuestions: Question[] = response.data;
     // const allQuestions = questions.filter(notMine(intraId));
     console.log("allQuestions: ", allQuestions);
@@ -117,6 +125,7 @@ const Home = () => {
   const [isQuestionOpen, setIsQuestionOpen] = useState(false);
   const [isMentoringOpen, setIsMentoringOpen] = useState(false);
   const [modalQustionId, setModalQuestionId] = useState(0);
+
   const onOpenQuestion = (questionId: number) => {
     setIsQuestionOpen(true);
     setModalQuestionId(questionId)
@@ -136,6 +145,10 @@ const Home = () => {
   useEffect(() => {
     void fetchMatched(setMatched);
   }, [])
+
+  // const handleCancel = () => {
+    
+  // }
 
   // TODO: 매칭 성사 로직 구현 필
   // const onClick = () => {

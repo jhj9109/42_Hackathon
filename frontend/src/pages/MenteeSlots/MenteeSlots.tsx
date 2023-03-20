@@ -60,6 +60,9 @@ const MenteeSlots = () => {
   const slotCompareFn = (el: number, i: number, arr: number[]) =>
     i === 0 || arr[i - 1] + 1 === el;
   
+  // const sessionCompareFn = (el: number, openSlots: Session[]) =>
+  //   openSlots
+  
   const onSubmit = () => {
     if (!(calSubmitAbled(selected))) {
       alert("올바르지 못한 시도입니다.");
