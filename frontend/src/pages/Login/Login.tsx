@@ -35,7 +35,7 @@ const Div2 = styled.div`
 const Login = () => {
   const navigator = useNavigate();
   const goRedirect = () => { window.location.href = JAEHYUKI_URL + "/login/42"; }
-  const [intraId, setIntraId] = useState("");
+  const [intraId, setIntraId] = useState(localStorage.getItem(ACCESS_TOKEN_STR) ?? "");
   const onLogin = () => {
     if (intraId !== "") {
       postRequest(`user/login?intraId=${intraId}`)
