@@ -221,7 +221,7 @@ const Home = () => {
       </HomeStyle>
       {isQuestionOpen && <Modal onConfirm={() => console.log("Click confirm.")} onClose={() => setIsQuestionOpen(false)} />}
       {isMentoringOpen && <Modal onConfirm={() => console.log("Click confirm.")} onClose={() => setIsMentoringOpen(false)} />}
-      {isNoticeOpen && <Modal2 msg={MSG} onConfirm={() => console.log("Click confirm.")} onClose={() => setIsNoticeOpen(false)} />}
+      {isNoticeOpen && <Modal2 msg={MSG} onConfirm={() => setIsNoticeOpen(false)} onClose={() => setIsNoticeOpen(false)} />}
     </>
   );
 };

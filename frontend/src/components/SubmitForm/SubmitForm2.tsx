@@ -185,8 +185,8 @@ const SubmitForm2 = ({ onSubmit, type, mentor }: Props) => {
   return (
     <>
       <FormContainer>
-        <InputContainer name={"title"} value={inputData.title.value} onChange={handleInputChange} disabled={inputData.title.editable}/>
-        <InputContainer name={"tag"} value={inputData.tag.value?.tagName ?? ""} onChange={handleInputChange} disabled={inputData.tag.editable}/>
+        <InputContainer name={"title"} value={inputData.title.value} onChange={() => console.log("change")} disabled={inputData.title.editable}/>
+        <InputContainer name={"tag"} value={inputData.tag.value?.tagName ?? ""} onChange={() => console.log("change")} disabled={inputData.tag.editable}/>
 
 
         {/* <input name="title" value={inputData.title.value} placeholder={"제목"} onChange={handleInputChange}></input>

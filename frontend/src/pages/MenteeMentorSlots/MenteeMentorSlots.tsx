@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getRequest } from '../../api/axios';
-import { MENTEE_MENTOR_SLOTS_NEXT_STEP_URL, MENTEE_SLOTS_NEXT_STEP_URL } from '../../api/uri';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
