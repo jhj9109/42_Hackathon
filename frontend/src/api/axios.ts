@@ -4,7 +4,7 @@ import { ACCESS_TOKEN_STR } from '../utils/cookieUtils';
 export const getToken = () => localStorage.getItem(ACCESS_TOKEN_STR) ?? ""
 
 const NGROK_URL = "https://69b9-121-135-181-61.jp.ngrok.io";
-export const NEED_SECURE = false; // secure가 필요하고 안필요하고
+export const NEED_SECURE = true; // secure가 필요하고 안필요하고
 
 export const JAEHYUKI_URL = 
   NEED_SECURE
@@ -16,11 +16,9 @@ const testHeaders = {
   Authorization: `Bearer ${getToken()}`,
 }
 
-axios.defaults.baseURL = 'https://example.com/api/';
-axios.defaults.withCredentials = true;
 const axiosClient = axios.create({
   baseURL: JAEHYUKI_URL,
-  withCredentials: true,
+  withCredentials: false, // 체크!!! 크레덴셜은 한쪽만?
   headers: testHeaders,
 });
 

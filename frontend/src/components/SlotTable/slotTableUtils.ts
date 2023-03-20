@@ -74,6 +74,9 @@ export const isMatchedSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelec
   !!openSlots?.some(session => session.noSessionQuestionDtos.some(question =>
     isClamp({rowIndex, colIndex, currDate, startTime: question.startTime, endTime:question.endTime})))
 
+export const isUnMatchedSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
+    isSlot({rowIndex, colIndex, openSlots, currDate}) && !isMatchedSlot({rowIndex, colIndex, openSlots, currDate})
+
 export const isElapsed = (rowIndex: number, colIndex: number, currDate: Date) =>
   colIndex === 0 && rowIndex < (currDate.getHours() * 2 + Math.ceil((Number(currDate.getMinutes()) + ADJUSTMENT_MINUTES) / 30));
 export const setState = (
@@ -147,6 +150,10 @@ export const setToArr = function<T>(s: Set<T>) {
  * @returns 연속된 슬롯여부를 의미하는 불린값 리턴
  */
 export const isContinuousSlot = function <T, U extends (el: T, i: number, arr: T[]) => boolean>(sortedSlot: T[], slotCompareFn: U) {
+  return sortedSlot.every(slotCompareFn);
+}
+
+export const isOneSession = function <T, U extends (el: T, i: number, arr: T[]) => boolean>(sortedSlot: T[], slotCompareFn: U) {
   return sortedSlot.every(slotCompareFn);
 }
 

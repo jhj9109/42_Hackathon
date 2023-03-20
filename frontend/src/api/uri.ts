@@ -1,5 +1,6 @@
 export const USER_SESSION_PATH = "user/session";
 export const USER_TAG_PATH = "user/tag";
+export const ALL_TAG_PATH = "tag";
 export const USER_QUESTION_PATH = "user/question";
 export const USER_MATCHED_PATH = "user/question/matched";
 export const ALL_QUESTION_PATH = "question";
