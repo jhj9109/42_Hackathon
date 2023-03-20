@@ -213,7 +213,7 @@ const MenteeMentorSlots = () => {
   
   return (
     <MenteeMentorSlotsStyle>
-      <Title>멘토링 시간 선택</Title>
+      <Title>멘토링 시간 선택3</Title>
       <FloatingBox>
         <label htmlFor='slotMode'>삭제모드</label>
         <input name='slotMode' id='slotMode' type='checkbox' onChange={onSlotModeChange}/>

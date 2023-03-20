@@ -1,5 +1,3 @@
-import { sampleUserTags } from "./userData"
-
 export const sampleOpenSlots: Session[] = [
   {
     sessionId: 1,

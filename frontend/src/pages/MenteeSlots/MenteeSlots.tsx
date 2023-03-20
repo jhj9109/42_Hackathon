@@ -77,10 +77,10 @@ const MenteeSlots = () => {
     navigator(MENTEE_SLOTS_NEXT_STEP_URL + "?startTime=" + startTime + "&endTime=" + endTime);
   }
 
-  useEffect(() => {
-    // TODO: axios 요청
-    setTimeout(() => setOpenSlots(sampleOpenSlots), 500);
-  }, [])
+  // useEffect(() => {
+  //   // TODO: axios 요청
+  //   setTimeout(() => setOpenSlots(sampleOpenSlots), 500);
+  // }, [])
 
   useEffect(() => {
     setSubmitAbled(calSubmitAbled(selected));

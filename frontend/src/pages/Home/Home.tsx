@@ -7,6 +7,7 @@ import Container from '../../components/Container/Container';
 import Modal from '../../components/Modal/Modal';
 import { ALL_QUESTION_PATH, USER_MATCHED_PATH, USER_QUESTION_PATH } from '../../api/uri';
 import { getIntervalDateString } from '../../utils/dateUtils';
+import Modal2 from '../../components/Modal/Modal2';
 
 const HomeStyle = styled.div`
   width: 100%;
@@ -116,6 +117,20 @@ const fetchUserDetail = async (setUserDetail: React.Dispatch<React.SetStateActio
   }
 }
 
+const MSG = `
+안녕하세요! 코알리숑 해커톤 “도와줘 카뎃!”팀입니다!
+ Libft를 클리어 했다면 당신도 Libft 전문가!
+42안에서 저희는 누구나 멘토가 될 수 있고 혹은 멘티가 될 수 있습니다. 저희가 제작한 42in은 클러스터 내에서 서로 모르는 내용들을 알려주고 또 배울 수 있도록하는 매칭 서비스 입니다.
+회원가입 : 회원가입 버튼을 클릭하여 42OAuth를 통해 회원가입을 진행 하실 수 있습니다.
+로그인 : 회원가입된 인트라아이디를 입력하여 로그인 하실 수 있습니다.
+*토큰 문제로 정상적인 로그인이 진행되지 않는다면 시크릿 탭이나 쿠키를 삭제한 후에 진행해주시면 감사하겠습니다!
+멘토로서참여:
+1. 답변세션을 열어서 질문을 모집한 수 있고 혹은 올라온 질문을 선택하여 답변 매칭을 잡을 수 있습니다.
+멘티로서 참여: 하고 싶다면 멘토가 열어논 세션을 선택하거나 질문을 올려 멘토님들을 기다릴 수 있습니다.
+시간상 기획 되었던 태그별 필터링 및 알림 서비스, 경험치 시스템, 칭호 시스템 등등구현되지 못한 기능들이 많으나 코알리숑 대표작으로 선별이 된다면 추후 확장할 계획입니다!
+*추신 : 우리 서버가 조금아파요…ㅠ 혹시 잘 안된다면 새로고침!  
+`
+
 const Home = () => {
   const currDate = new Date();
   const navigator = useNavigate();
@@ -124,6 +139,7 @@ const Home = () => {
   const [questions, setQuestions] = useState<Question[]>(() => []);
   const [isQuestionOpen, setIsQuestionOpen] = useState(false);
   const [isMentoringOpen, setIsMentoringOpen] = useState(false);
+  const [isNoticeOpen, setIsNoticeOpen] = useState(true);
   const [modalQustionId, setModalQuestionId] = useState(0);
 
   const onOpenQuestion = (questionId: number) => {
@@ -205,6 +221,7 @@ const Home = () => {
       </HomeStyle>
       {isQuestionOpen && <Modal onConfirm={() => console.log("Click confirm.")} onClose={() => setIsQuestionOpen(false)} />}
       {isMentoringOpen && <Modal onConfirm={() => console.log("Click confirm.")} onClose={() => setIsMentoringOpen(false)} />}
+      {isNoticeOpen && <Modal2 msg={MSG} onConfirm={() => console.log("Click confirm.")} onClose={() => setIsNoticeOpen(false)} />}
     </>
   );
 };

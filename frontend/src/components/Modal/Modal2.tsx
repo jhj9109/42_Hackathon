@@ -26,8 +26,8 @@ const ModalContainer = styled.div<Props>`
 const ModalStyle = styled.div`
   position: absolute;
   background-color: white;
-  width: 20%;
-  height: 30%;
+  width: 100vw;
+  height: 100vh;
   border-radius: 0.5rem;
 
   @keyframes fadeIn {

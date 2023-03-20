@@ -53,9 +53,7 @@ const isOthersSession = (userId: number) => (session: Session) =>
   !(session.mentoUser?.userId === userId)
 
 const getUrlToMentoSlot = (userId: number) =>
-  userId === undefined
-  ? `/mentee/mentors/0/slots`
-  : `/mentee/mentors/${userId}/slots`;
+  `/mentee/mentors/${userId}/slots`;
 
 const MenteeMentors = () => {
   const navigator = useNavigate();
@@ -81,7 +79,8 @@ const MenteeMentors = () => {
         {
           mentorList?.map(mentor => (
             // TODO: myUserId 바꾸기
-            <Element key={mentor.sessionId} onClick={() => navigator(getUrlToMentoSlot(myUserId))}>
+            <Element key={mentor.sessionId} onClick={() =>
+              navigator(getUrlToMentoSlot(mentor?.mentoUser?.userId ?? 0))}>
               <Nickname>{mentor?.mentoUser?.intraId ?? "유저"}</Nickname>
               <Tag>{mentor.tags?.map(tag => tag.tagName).reduce((prev, el) => prev + ", " + el)}</Tag>
             </Element>
