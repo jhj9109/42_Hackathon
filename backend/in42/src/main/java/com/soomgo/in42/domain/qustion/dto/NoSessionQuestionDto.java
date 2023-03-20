@@ -1,28 +1,21 @@
 package com.soomgo.in42.domain.qustion.dto;
 
-import com.soomgo.in42.domain.comment.Comment;
 import com.soomgo.in42.domain.comment.dto.CommentDto;
 import com.soomgo.in42.domain.qustion.Question;
-import com.soomgo.in42.domain.session.Session;
 import com.soomgo.in42.domain.session.dto.SessionDto;
-import com.soomgo.in42.domain.tag.Tag;
 import com.soomgo.in42.domain.tag.dto.TagDto;
 import com.soomgo.in42.domain.user.dto.UserDto;
-import com.soomgo.in42.global.type.StatusType;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-@Getter
 @Builder
-public class QuestionDto {
-
+@Getter
+public class NoSessionQuestionDto {
     private Integer questionId;
-    private SessionDto session;
     private UserDto menteeUser;
     private String title;
     private String content;
@@ -32,10 +25,9 @@ public class QuestionDto {
     private List<TagDto> tags;
     private List<CommentDto> comments;
 
-    public static QuestionDto from(Question question) {
-        return QuestionDto.builder()
+    public static NoSessionQuestionDto from(Question question) {
+        return NoSessionQuestionDto.builder()
                 .questionId(question.getId())
-                .session(SessionDto.from(question.getSession()))
                 .menteeUser(UserDto.from(question.getMenteeUser()))
                 .title(question.getTitle())
                 .content(question.getContent())
@@ -46,23 +38,12 @@ public class QuestionDto {
                 .build();
     }
 
-    public static List<QuestionDto> from(List<Question> questions) {
-        List<QuestionDto> questionDtos = new ArrayList<>();
+    public static List<NoSessionQuestionDto> from(List<Question> questions) {
+        List<NoSessionQuestionDto> noSessionQuestionDtos = new ArrayList<>();
         for (Question question : questions) {
-            QuestionDto questionDto = QuestionDto.from(question);
-            questionDtos.add(questionDto);
+            NoSessionQuestionDto noSessionQuestionDto = NoSessionQuestionDto.from(question);
+            noSessionQuestionDtos.add(noSessionQuestionDto);
         }
-        return questionDtos;
+        return noSessionQuestionDtos;
     }
-    //    {
-//[{
-//        questionId : Integer
-//        session : Session
-//        title : String
-//        content : String
-//        startTime : Date
-//        endTime : Date
-//        status : String
-//    } , { … }]
-//    }
 }

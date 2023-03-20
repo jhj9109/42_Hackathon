@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getRequest, postRequest } from '../../api/axios';
-import { USER_SESSION_PATH, USER_SESSION_POST_PATH, USER_TAG_PATH } from '../../api/uri';
+import { ALL_TAG_PATH, USER_SESSION_PATH, USER_TAG_PATH } from '../../api/uri';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
-import { isContinuousSlot, notSlot, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
-import { sampleOpenSlots } from '../../sampleDatas/slotData';
-import { sampleUserTags } from '../../sampleDatas/userData';
+import { isContinuousSlot,  isUnMatchedSlot,  notSlot, setToArr, sortedSlotToTime, updateSelected } from '../../components/SlotTable/slotTableUtils';
 
 const ButtonContainer = styled.div`
   width: 100%;
@@ -62,14 +60,20 @@ const TagCheckBox = styled.div`
   overflow-wrap: normal;
 `
 
+const FloatingBox = styled.div`
+  position: absolute;
+  top: 0px;
+  right: 0px;
+`
+
 interface Data {
   startTime: string;
   endTime: string;
   tags: Tag[];
 }
 
-const convertExpandedTag = (tags: Tag[]): ExpandedTag[] =>
-  tags.map(tag => ({tag, selected: true}));
+const convertExpandedTag = (initial: boolean, tags: Tag[]): ExpandedTag[] =>
+  tags?.map(tag => ({tag, selected: initial}));
 
 const isSubmitAvaiable = (tags: ExpandedTag[] | null, selected: Set<number>) =>
   tags?.some((t) => t.selected) && selected.size !== 0
@@ -105,6 +109,14 @@ const MenteeMentorSlots = () => {
   
   const [selected, setSelected] = useState(() => new Set<number>());
   const [submitAbled, setSubmitAbled] = useState(false);
+
+  // TODO: deleted mode
+  const [deleteMode, setDeleteMode] = useState(false); // 슬롯을 추가 | 삭제
+  const onSlotModeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setDeleteMode(e.target.checked);
+  }
+  const getSelectableMode = (deleteMode: boolean) =>
+    deleteMode ? isUnMatchedSlot : notSlot
   
   const handleSelect = (rowIndex: number, colIndex: number) =>
     setSelected((prev) => updateSelected(prev, rowIndex + colIndex * 48))
@@ -112,7 +124,7 @@ const MenteeMentorSlots = () => {
   const onTagSelectedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tagId = Number(e.target.getAttribute("data-tagid"))
     setTags(prev =>
-      (prev as ExpandedTag[]).map(t =>
+      (prev as ExpandedTag[])?.map(t =>
         t.tag.tagId === tagId ? {...t, selected: !t.selected} : t))
   }
 
@@ -137,7 +149,7 @@ const MenteeMentorSlots = () => {
       return;
     }
     const sortedSlot = setToArr(selected).sort((a, b) => a -b);
-    const filteredTags = (tags as ExpandedTag[]).filter(t => t.selected).map(t => t.tag);
+    const filteredTags = (tags as ExpandedTag[]).filter(t => t.selected)?.map(t => t.tag);
     if (!isContinuousSlot(sortedSlot, slotCompareFn)) {
       alert("연속된 슬롯만 가능합니다.");
       return;
@@ -164,23 +176,29 @@ const MenteeMentorSlots = () => {
       })
   }
 
-  // useEffect(() => {
-  //   // TODO: axios 요청 
-  //   setTimeout(() => setOpenSlots(sampleOpenSlots), 500); // USER_SESSION_PATH & GET
-  //   setTimeout(() => setTags(convertExpandedTag(sampleUserTags)), 500); // USER_TAG_PATH & GET
-  // }, [])
+  useEffect(() => {
+    setSelected(() => new Set<number>())
+  }, [deleteMode])
 
   useEffect(() => {
     getRequest(USER_SESSION_PATH)
-      .then(res => setOpenSlots(res.data as Session[]))
+      .then(res => {
+        console.log("유저 자신의 기존 세션: ",res.data);
+        setOpenSlots(res.data as Session[])
+      })
       .catch(err => console.error(err))
   }, [])
 
   useEffect(() => {
-    getRequest(USER_TAG_PATH)
+    const tagMode = ALL_TAG_PATH; // ALL_TAG_PATH | USER_TAG_PATH
+    getRequest(tagMode)
       .then(res => {
-        // console.log(res.data.tags);
-        setTags(convertExpandedTag(res.data.tags as Tag[]))
+        console.log(tagMode === ALL_TAG_PATH
+          ? "모든 태그 정보"
+          : "유저 자신의 태그 정보: ", res.data.tags);
+        setTags(convertExpandedTag(
+          tagMode !== ALL_TAG_PATH,
+          tagMode === ALL_TAG_PATH ? res.data : res.data.tags as Tag[]))
       })
       .catch(err => console.error(err))
   }, [])
@@ -195,7 +213,11 @@ const MenteeMentorSlots = () => {
   
   return (
     <MenteeMentorSlotsStyle>
-      <Title>멘토링 시간 선택</Title>
+      <Title>멘토링 시간 선택3</Title>
+      <FloatingBox>
+        <label htmlFor='slotMode'>삭제모드</label>
+        <input name='slotMode' id='slotMode' type='checkbox' onChange={onSlotModeChange}/>
+      </FloatingBox>
       {
         loading ? <div>로딩중</div>
         :
@@ -204,7 +226,7 @@ const MenteeMentorSlots = () => {
             <SlotTable
               currDate={currDate}
               openSlots={openSlots}
-              isSelectable={notSlot}
+              isSelectable={getSelectableMode(deleteMode)}
               selected={selected}
               onSelect={handleSelect}
             />

@@ -1,37 +1,39 @@
-export const sampleUserTags: Tag[] = [
-  {tagId: 1, tagName: "Libft"},
-  {tagId: 2, tagName: "Gnl"},
-  {tagId: 3, tagName: "33333333"},
-  {tagId: 4, tagName: "44444444"},
-  {tagId: 5, tagName: "55555555"},
-  {tagId: 6, tagName: "666666666"},
-  {tagId: 7, tagName: "77777777"},
-  {tagId: 8, tagName: "88888888"},
-  {tagId: 9, tagName: "99999999"},
-  {tagId: 10, tagName: "101010101010101010"},
-  {tagId: 11, tagName: "1111111111111111111"},
-  {tagId: 13, tagName: "131313131313131313"},
-  {tagId: 14, tagName: "14141414141414141"},
-]
+import { sampleTags } from "./tagData"
 
-export const sampleUserExpandedTags: ExpandedTag[] = [
-  { tag: {tagId: 1, tagName: "Libft"}, selected: true },
-  { tag: {tagId: 2, tagName: "Gnl"}, selected: true },
-  { tag: {tagId: 3, tagName: "33333333"}, selected: false },
-  { tag: {tagId: 4, tagName: "44444444"}, selected: false },
-  { tag: {tagId: 5, tagName: "55555555"}, selected: false },
-  { tag: {tagId: 6, tagName: "666666666"}, selected: false },
-  { tag: {tagId: 7, tagName: "77777777"}, selected: false },
-  { tag: {tagId: 8, tagName: "88888888"}, selected: false },
-  { tag: {tagId: 9, tagName: "99999999"}, selected: false },
-  { tag: {tagId: 10, tagName: "101010101010101010"}, selected: false },
-  { tag: {tagId: 11, tagName: "1111111111111111111"}, selected: false },
-  { tag: {tagId: 13, tagName: "131313131313131313"}, selected: false },
-  { tag: {tagId: 14, tagName: "14141414141414141"}, selected: false },
-]
+const randomBoolean = () => !!Math.floor(Math.random() * 2);
 
-export const sampleUserInfos: UserDetail[] = [
-  {userId: 1, intraId : "hyeonjan", email : "hyeonjan@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 42},
-  {userId: 2, intraId : "jaehyuki", email : "hyeonjan@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 424},
-  {userId: 3, intraId : "kangkim", email : "hyeonjan@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 4242},
-]
+// export const sampleUserTags = {
+//   1: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   2: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   3: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   4: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   5: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   6: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   7: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   8: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   9: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   10: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   421: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   422: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+//   433: Array.from({ length: 30 }).map((_, i) => sampleTags[i + 1]).filter(() => randomBoolean()),
+// }
+
+// // export const sampleUserExpandedTags: ExpandedTag[] = 
+// //   sampleUserTags[0].map(tag => ({tag, selected: randomBoolean()}))
+
+// export const sampleUserInfos: UserDetail[] = [
+//   {userId: 421, intraId : "hyeonjan", email : "hyeonjan@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 100},
+//   {userId: 422, intraId : "jaehyuki", email : "jaehyuki@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 200},
+//   {userId: 423, intraId : "kangkim", email : "kangkim@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 300},
+//   {userId: 1, intraId : "한놈", email : "한놈@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 11},
+//   {userId: 2, intraId : "두시기", email : "두시기@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 22},
+//   {userId: 3, intraId : "석삼", email : "석삼@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 33},
+//   {userId: 4, intraId : "너구리", email : "너구리@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 44},
+//   {userId: 5, intraId : "오징어", email : "오징어@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 55},
+//   {userId: 6, intraId : "육개장", email : "육개장@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 66},
+//   {userId: 7, intraId : "칠면조", email : "칠면조@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 77},
+//   {userId: 8, intraId : "팔보채", email : "팔보채@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 88},
+//   {userId: 9, intraId : "구공탄", email : "구공탄@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 99},
+//   {userId: 10, intraId : "십자가", email : "십자가@student.42seoul.kr", imageUri : "", roleType : "", totalExp: 4242},
+// ]
+

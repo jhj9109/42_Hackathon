@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { MENTEE_SLOTS_NEXT_STEP_URL, USER_SESSION_POST_PATH } from '../../api/uri';
+import { MENTEE_SLOTS_NEXT_STEP_URL } from '../../api/uri';
 import Button from '../../components/Button/Button';
 import Container from '../../components/Container/Container';
 import SlotTable from '../../components/SlotTable/SlotTable';
@@ -60,6 +60,9 @@ const MenteeSlots = () => {
   const slotCompareFn = (el: number, i: number, arr: number[]) =>
     i === 0 || arr[i - 1] + 1 === el;
   
+  // const sessionCompareFn = (el: number, openSlots: Session[]) =>
+  //   openSlots
+  
   const onSubmit = () => {
     if (!(calSubmitAbled(selected))) {
       alert("올바르지 못한 시도입니다.");
@@ -74,10 +77,10 @@ const MenteeSlots = () => {
     navigator(MENTEE_SLOTS_NEXT_STEP_URL + "?startTime=" + startTime + "&endTime=" + endTime);
   }
 
-  useEffect(() => {
-    // TODO: axios 요청
-    setTimeout(() => setOpenSlots(sampleOpenSlots), 500);
-  }, [])
+  // useEffect(() => {
+  //   // TODO: axios 요청
+  //   setTimeout(() => setOpenSlots(sampleOpenSlots), 500);
+  // }, [])
 
   useEffect(() => {
     setSubmitAbled(calSubmitAbled(selected));

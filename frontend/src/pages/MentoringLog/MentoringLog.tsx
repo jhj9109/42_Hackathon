@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getRequest } from '../../api/axios';
+import { USER_MENTORING_LOG_PATH } from '../../api/uri';
 import Container from '../../components/Container/Container';
+import { getShortDate } from '../../utils/dateUtils';
 
 const MentoringLogStyle = styled.div`
   width: 100%;
@@ -28,12 +31,51 @@ const Log = styled.div`
   border-bottom: 0.1rem solid white;
 `;
 
+
+// USER_MENTORING_LOG_PATH
+const extractLogs = (logs: MentoringLogs[]) => {
+  // noSessionQuestionDtos
+  const dtos = logs.flatMap(log => log.noSessionQuestionDtos);
+  const filteredDto = dtos.filter(log => !!(log.comments?.length));
+  const comments = filteredDto.flatMap(dto => dto.comments as Comment[])
+  console.log(comments);
+  return comments;
+}
 const MentoringLog = () => {
+  const [dtos, setDtos] = useState<NoSessionQeustionDto[]>(() => []);
+
+  useEffect(() => {
+    getRequest(USER_MENTORING_LOG_PATH)
+      .then(res => {
+        const data: MentoringLogs[] = res.data;
+        console.log("data", data);
+        const dtoList = data.flatMap(d => d.noSessionQuestionDtos)
+                            .flat()
+                            // .filter(dto => !!dto.comments?.length);
+        console.log("dtoList", dtoList);
+        setDtos(dtoList);
+      })
+  }, [])
+  
   return (
     <MentoringLogStyle>
       <Title>멘토링 로그</Title>
       <Logs>
-        <Log>멘토링 로그입니다.</Log>
+        {
+          dtos?.map((dto, idx) => (
+            <>
+              { idx !== 0 && <hr style={{borderTop: "3px solid $bbb"}}></hr> }
+              <Log style={{marginBottom: "1rem"}}>{dto.menteeUser.intraId}님의 {dto.tags[0]?.tagName ?? "과제"} {getShortDate(dto.startTime)}</Log>
+              <Log>{dto.title} {dto.content}</Log>
+              {
+                <>
+                  {dto.comments?.map((comment, i) =>
+                    (<Log key={i}>{comment.content}</Log>))}
+                </>
+              }
+            </>
+          ))
+        }
       </Logs>
     </MentoringLogStyle>
   );

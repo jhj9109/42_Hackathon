@@ -1,25 +1,25 @@
 import axios from 'axios';
+import { ACCESS_TOKEN_STR } from '../utils/cookieUtils';
+
+export const getToken = () => localStorage.getItem(ACCESS_TOKEN_STR) ?? ""
 
 const NGROK_URL = "https://69b9-121-135-181-61.jp.ngrok.io";
-const JAEJYUKI_URL = "http://10.18.201.217:8080/"
+export const NEED_SECURE = true; // secure가 필요하고 안필요하고
+
+export const JAEHYUKI_URL = 
+  NEED_SECURE
+  ? "https://10.18.201.217:8080"
+  : "http://10.18.201.217:8080"
+
 const testHeaders = {
   'Content-Type': 'application/json',
-  Authorization: `Bearer ${"hyeonjan"}`,
+  Authorization: `Bearer ${getToken()}`,
 }
 
-/**
- * TODO: 구동 당시 환경에 따라 수정 필수
- * 토요일 저녁 기준 쿠키로 인증에 실패해서 임시로 헤더로 인증 시도
- */
-// const axiosClient = axios.create({
-//   baseURL: JAEJYUKI_URL,
-//   withCredentials: true,
-//   headers: testHeaders
-// });
-
 const axiosClient = axios.create({
-  baseURL: 'http://10.19.237.190:8080',
-  withCredentials: true,
+  baseURL: JAEHYUKI_URL,
+  withCredentials: false, // 체크!!! 크레덴셜은 한쪽만?
+  headers: testHeaders,
 });
 
 export async function getRequest(URL: string) {

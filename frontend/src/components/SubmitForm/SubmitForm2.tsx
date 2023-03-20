@@ -127,7 +127,7 @@ const getInitialObject = (): FormInputData => ({
 //   }
 // }
 
-const SubmitForm = ({ onSubmit, type, mentor }: Props) => {
+const SubmitForm2 = ({ onSubmit, type, mentor }: Props) => {
   const navigator = useNavigate();
   const location = useLocation();
   
@@ -139,27 +139,11 @@ const SubmitForm = ({ onSubmit, type, mentor }: Props) => {
 
   const calSubmitAbled = () => true;
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const name = e.target.getAttribute("name") as string;
-    // const { value } = e.target;
-    const { name, value } = e.target;
-  
-    if (!(name in inputData)) {
-      return ;
-    }
-
-    // name에 해당하는 객체 찾기
-    const targetObject = inputData[name as keyof FormInputData];
-  
-    // editable이 true일 경우만 값을 업데이트
-    if (targetObject.editable) {
-      const updatedObject = { ...targetObject, value };
-      setInputData((prev) => ({
-        ...prev,
-        [name]: updatedObject,
-      }));
-    }
-  };
+  // title : String
+  // content : String
+  // startTime : Date
+  // endTime : Date
+  // tag : Tag
 
   useEffect(() => {
     const urlPath = location.pathname;
@@ -193,13 +177,16 @@ const SubmitForm = ({ onSubmit, type, mentor }: Props) => {
 
   // TODO: 의존성 필요
   useEffect(() => {
+    // /mentee/mentors/3/mentoring?startTime=2023-03-20T16:00:00.000Z&endTime=2023-03-20T16:30:00.000Z
+    // 1. 3:sessionId
+    
     setSubmitAbled(calSubmitAbled());
   }, [])
   return (
     <>
       <FormContainer>
-        <InputContainer name={"title"} value={inputData.title.value} onChange={handleInputChange} disabled={inputData.title.editable}/>
-        <InputContainer name={"tag"} value={inputData.tag.value?.tagName ?? ""} onChange={handleInputChange} disabled={inputData.tag.editable}/>
+        <InputContainer name={"title"} value={inputData.title.value} onChange={() => console.log("change")} disabled={inputData.title.editable}/>
+        <InputContainer name={"tag"} value={inputData.tag.value?.tagName ?? ""} onChange={() => console.log("change")} disabled={inputData.tag.editable}/>
 
 
         {/* <input name="title" value={inputData.title.value} placeholder={"제목"} onChange={handleInputChange}></input>
@@ -238,4 +225,4 @@ const SubmitForm = ({ onSubmit, type, mentor }: Props) => {
   );
 };
 
-export default SubmitForm;
+export default SubmitForm2;

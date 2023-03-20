@@ -1,8 +1,8 @@
 import React from 'react';
-import SubmitForm from '../../components/SubmitForm/SubmitForm';
+import SubmitForm2 from '../../components/SubmitForm/SubmitForm2';
 
 const MenteeMentorMentoring = () => {
-  return <SubmitForm type="mentoring" />;
+  return <SubmitForm2 type="mentoring" />;
 };
 
 export default MenteeMentorMentoring;

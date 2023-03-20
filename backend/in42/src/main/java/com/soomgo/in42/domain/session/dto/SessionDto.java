@@ -1,12 +1,14 @@
 package com.soomgo.in42.domain.session.dto;
 
 
+import com.soomgo.in42.domain.qustion.dto.NoSessionQuestionDto;
 import com.soomgo.in42.domain.session.Session;
 import com.soomgo.in42.domain.tag.dto.TagDto;
 import com.soomgo.in42.domain.user.User;
 import com.soomgo.in42.domain.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Getter
+@Setter
 @Builder
 public class SessionDto {
 
@@ -25,8 +28,9 @@ public class SessionDto {
 
     private LocalDateTime endTime;
 
-    private List<TagDto> tags;
+    private List<NoSessionQuestionDto> noSessionQuestionDtos;
 
+    private List<TagDto> tags;
     public static SessionDto from(Session session) {
         if (session == null)
             return null;
@@ -35,6 +39,7 @@ public class SessionDto {
                 .mentoUser(UserDto.from(session.getMentoUser()))
                 .startTime(session.getStartTime())
                 .endTime(session.getEndTime())
+                .noSessionQuestionDtos(NoSessionQuestionDto.from(session.getQuestions()))
                 .tags(TagDto.from(session.getTags()))
                 .build();
     }

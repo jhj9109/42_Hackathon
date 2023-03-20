@@ -58,6 +58,7 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+        System.out.println("OAUTH_TOKEN : " + authToken.getAuthorizedClientRegistrationId());
         ProviderType providerType = ProviderType.keyOf (authToken.getAuthorizedClientRegistrationId().toUpperCase());
 
         OidcUser user = ((OidcUser) authentication.getPrincipal());
@@ -73,7 +74,6 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
-        // refresh 토큰 설정
         long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
 
         AuthToken refreshToken = tokenProvider.createAuthToken(
@@ -81,7 +81,6 @@ public class OAuthAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
                 new Date(now.getTime() + refreshTokenExpiry)
         );
 
-        // DB 저장
         User saveUser = userRepository.findByIntraId(userInfo.getIntraId()).orElseThrow();
 
         Token userRefreshToken = userRefreshTokenRepository.findByUser(saveUser);

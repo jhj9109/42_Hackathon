@@ -17,6 +17,7 @@ export const TILE_STATE = {
   SLOTS: 1 << 1,
   SELECTABLE: 1 << 2,
   SELECTED: 1 << 3,
+  MATCHED: 1 << 4,
 };
 
 export const updateSelected = function <T>(prev: Set<T>, el: T) {
@@ -39,6 +40,7 @@ export const getString = (date: Date) =>
 export const utcOffset = 9 * 60 * 60 * 1000; // UTC+9
 export const getKstDate = (date: Date) => new Date(date.getTime() + utcOffset)
 
+// TODO: tTime <= eTIme으로 인해 슬롯이 하나 더 늘어남 => < 로 픽스
 export const isClamp = ({rowIndex, colIndex, currDate, startTime, endTime}: IsClampParams) => {
   // 2023-03-17T05:30:17.828Z
 
@@ -58,7 +60,7 @@ export const isClamp = ({rowIndex, colIndex, currDate, startTime, endTime}: IsCl
     end.getTime() / (60 * 1000)
   ]
   
-  return (sTime <= tTime && tTime <= eTime);
+  return (sTime <= tTime && tTime < eTime);
 }
     
 
@@ -67,6 +69,13 @@ export const isSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectablePa
 
 export const notSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
   !isSlot({rowIndex, colIndex, openSlots, currDate});
+
+export const isMatchedSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
+  !!openSlots?.some(session => session.noSessionQuestionDtos.some(question =>
+    isClamp({rowIndex, colIndex, currDate, startTime: question.startTime, endTime:question.endTime})))
+
+export const isUnMatchedSlot = ({rowIndex, colIndex, openSlots, currDate}: IsSelectableParams) =>
+    isSlot({rowIndex, colIndex, openSlots, currDate}) && !isMatchedSlot({rowIndex, colIndex, openSlots, currDate})
 
 export const isElapsed = (rowIndex: number, colIndex: number, currDate: Date) =>
   colIndex === 0 && rowIndex < (currDate.getHours() * 2 + Math.ceil((Number(currDate.getMinutes()) + ADJUSTMENT_MINUTES) / 30));
@@ -90,9 +99,13 @@ export const setState = (
     if (selected.has(i)) {
       state |= TILE_STATE.SELECTED;
     }
-    // 슬록 여부
+    // 슬롯 여부
     if (isSlot({rowIndex, colIndex, openSlots, currDate})) {
       state |= TILE_STATE.SLOTS;
+    }
+    // 매칭된 슬롯 여부, #BB2649
+    if (isMatchedSlot({rowIndex, colIndex, openSlots, currDate})) {
+      state |= TILE_STATE.MATCHED;
     }
   }
   return state;
@@ -115,6 +128,9 @@ export const setTileClass = (state: number) => {
   if (state & TILE_STATE.SLOTS) {
     className += ' slot'
   }
+  if (state & TILE_STATE.MATCHED) {
+    className += ' matched'
+  }
   return className;
 }
 
@@ -134,6 +150,10 @@ export const setToArr = function<T>(s: Set<T>) {
  * @returns 연속된 슬롯여부를 의미하는 불린값 리턴
  */
 export const isContinuousSlot = function <T, U extends (el: T, i: number, arr: T[]) => boolean>(sortedSlot: T[], slotCompareFn: U) {
+  return sortedSlot.every(slotCompareFn);
+}
+
+export const isOneSession = function <T, U extends (el: T, i: number, arr: T[]) => boolean>(sortedSlot: T[], slotCompareFn: U) {
   return sortedSlot.every(slotCompareFn);
 }
 

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class UserDto {
-    private Integer id;
+    private Integer userId;
     private String intraId;
     private String email;
     private String imageUri;
@@ -21,7 +21,7 @@ public class UserDto {
             userDto = null;
         } else {
             userDto = UserDto.builder()
-                    .id(user.getId())
+                    .userId(user.getId())
                     .intraId(user.getIntraId())
                     .email(user.getEmail())
                     .imageUri(user.getImageUri())
@@ -35,7 +35,7 @@ public class UserDto {
     @Override
     public String toString() {
         return "UserDto{" +
-                "id=" + id +
+                "userId=" + userId +
                 ", intraId='" + intraId + '\'' +
                 ", email='" + email + '\'' +
                 ", imageUri='" + imageUri + '\'' +

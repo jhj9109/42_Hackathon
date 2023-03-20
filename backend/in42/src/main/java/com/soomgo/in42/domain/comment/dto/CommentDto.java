@@ -12,14 +12,14 @@ import java.util.List;
 @Builder
 @Getter
 public class CommentDto {
-    Integer id;
+    Integer commentId;
     String content;
 
     public static CommentDto from(Comment comment) {
         if (comment == null)
             return null;
         return CommentDto.builder()
-                .id(comment.getId())
+                .commentId(comment.getId())
                 .content(comment.getContent())
                 .build();
     }
