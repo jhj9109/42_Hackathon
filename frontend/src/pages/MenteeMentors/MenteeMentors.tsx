@@ -79,11 +79,11 @@ const MenteeMentors = () => {
       <MenteeMentorsStyle>
         <Title>멘토 리스트</Title>
         {
-          mentorList.map(mentor => (
+          mentorList?.map(mentor => (
             // TODO: myUserId 바꾸기
             <Element key={mentor.sessionId} onClick={() => navigator(getUrlToMentoSlot(myUserId))}>
               <Nickname>{mentor?.mentoUser?.intraId ?? "유저"}</Nickname>
-              <Tag>{mentor.tags.map(tag => tag.tagName).reduce((prev, el) => prev + ", " + el)}</Tag>
+              <Tag>{mentor.tags?.map(tag => tag.tagName).reduce((prev, el) => prev + ", " + el)}</Tag>
             </Element>
           ))
         }

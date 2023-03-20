@@ -62,7 +62,7 @@ const MentoringLog = () => {
       <Title>멘토링 로그</Title>
       <Logs>
         {
-          dtos.map((dto, idx) => (
+          dtos?.map((dto, idx) => (
             <>
               { idx !== 0 && <hr style={{borderTop: "3px solid $bbb"}}></hr> }
               <Log style={{marginBottom: "1rem"}}>{dto.menteeUser.intraId}님의 {dto.tags[0]?.tagName ?? "과제"} {getShortDate(dto.startTime)}</Log>

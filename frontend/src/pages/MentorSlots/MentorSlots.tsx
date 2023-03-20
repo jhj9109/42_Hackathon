@@ -73,7 +73,7 @@ interface Data {
 }
 
 const convertExpandedTag = (initial: boolean, tags: Tag[]): ExpandedTag[] =>
-  tags.map(tag => ({tag, selected: initial}));
+  tags?.map(tag => ({tag, selected: initial}));
 
 const isSubmitAvaiable = (tags: ExpandedTag[] | null, selected: Set<number>) =>
   tags?.some((t) => t.selected) && selected.size !== 0
@@ -124,7 +124,7 @@ const MenteeMentorSlots = () => {
   const onTagSelectedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const tagId = Number(e.target.getAttribute("data-tagid"))
     setTags(prev =>
-      (prev as ExpandedTag[]).map(t =>
+      (prev as ExpandedTag[])?.map(t =>
         t.tag.tagId === tagId ? {...t, selected: !t.selected} : t))
   }
 
@@ -149,7 +149,7 @@ const MenteeMentorSlots = () => {
       return;
     }
     const sortedSlot = setToArr(selected).sort((a, b) => a -b);
-    const filteredTags = (tags as ExpandedTag[]).filter(t => t.selected).map(t => t.tag);
+    const filteredTags = (tags as ExpandedTag[]).filter(t => t.selected)?.map(t => t.tag);
     if (!isContinuousSlot(sortedSlot, slotCompareFn)) {
       alert("연속된 슬롯만 가능합니다.");
       return;
